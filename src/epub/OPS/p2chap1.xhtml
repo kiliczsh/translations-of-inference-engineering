@@ -1,0 +1,432 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml" xmlns:schema="http://schema.org/" xmlns:php="http://php.net/xsl" lang="tr-TR" xml:lang="tr-TR">
+<head>
+<meta charset="utf-8"/>
+<title>Ön Koşullar - Bölüm 1 - Ön Koşullar</title>
+<link rel="stylesheet" href="styles-lg.css" type="text/css"/>
+</head>
+<body epub:type="bodymatter" lang="tr-TR" xml:lang="tr-TR">
+<section class="chap" epub:type="chapter" id="chap-010" role="doc-chapter"><span epub:type="pagebreak" id="page_25" title="25" role="doc-pagebreak"/>
+  <div class="chap_debut"><!--debut	--></div>
+  <h2 class="hi_chap"><span epub:type="title" class="chap_tit" lang="tr-TR"><span>Ön Koşullar</span></span></h2>
+  <div class="dev">
+    <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Çıkarım mühendisliği, üretken modellerin canlı ortamdaki sunumunu optimize ederek yapay zeka ürünlerine hız ve ölçek katar.</p>
+    <p class="bl"> </p>
+    <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Optimizasyon, bir dizi seçenek arasından en iyi çözümü belirlemek demektir. Model performansını optimize etmeden ve sağlam bir altyapı kurmadan önce, ürününüz için “en iyi”nin ne anlama geldiğini bilmeniz gerekir – performans iyileştirmelerinin çoğu, gecikme, verim ve kalite arasında ödünleşimler yapmaktan gelir.</p>
+    <p class="bl"> </p>
+    <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Pratikte optimizasyon, genellikle tek bir faktörü maksimize etmekten çok doğru dengeyi bulmakla ilgilidir.</p>
+    <p class="bl"> </p>
+    <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">NFL oyuncuları iri, hızlı ve güçlüdür. Ama sumo güreşçileri kadar iri, olimpik sprinterler kadar hızlı ya da şampiyon halterciler kadar güçlü değillerdir. Vücutları ve becerileri, tam bir sezon boyunca oynadıkları pozisyonun spesifik gereksinimlerini karşılamak üzere optimize edilmiştir.</p>
+    <figure class="fig" id="fig-008">
+      <div class="imagelarge"><img src="images/fig_7.jpg" alt="" class="imagelarge" role="presentation"/></div>
+      <figcaption class="leg">
+        <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR"><b>Şekil 1.1: </b>Tıpkı elit sporcular gibi, çıkarım servisleri de iş yüklerinin gereksinimlerine göre uzmanlaşmış olmalıdır.</p>
+      </figcaption>
+    </figure>
+    <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Benzer şekilde, çıkarım sisteminiz de modelinizin, ürününüzün ve trafiğinizin spesifik gereksinimlerini karşılayacak şekilde optimize edilmelidir. Ne kadar çok kısıt tanımlayabilirseniz, o kadar iyi sonuçlar elde edebilirsiniz.</p>
+    <p class="bl"> </p>
+    <p class="bl"> </p>
+    <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR"><span epub:type="pagebreak" id="page_26" title="26" role="doc-pagebreak"/>Şunları bilmeniz gerekir:</p>
+    <ul class="liste_puce">
+      <li>
+        <p class="liste_txt_courant_ssalinea" lang="tr-TR"><b>Model gereksinimleri: </b>Hangi modelde/modellerde çıkarım çalıştırmanız gerekiyor?</p>
+      </li>
+      <li>
+        <p class="liste_txt_courant_ssalinea" lang="tr-TR"><b>Uygulama arayüzü: </b>Girdiler modele nasıl iletilecek ve çıktının hangi formatta olması bekleniyor?</p>
+      </li>
+      <li>
+        <p class="liste_txt_courant_ssalinea" lang="tr-TR"><b>Gecikme bütçesi: </b>Uçtan uca, ürününüzün bir kullanıcı eylemine ne kadar hızlı yanıt vermesi gerekiyor?</p>
+      </li>
+      <li>
+        <p class="liste_txt_courant_ssalinea" lang="tr-TR"><b>Birim ekonomisi: </b>İstek başına, kullanıcı başına veya ay başına ne kadar harcamak mantıklı?</p>
+      </li>
+      <li>
+        <p class="liste_txt_courant_ssalinea" lang="tr-TR"><b>Kullanım örüntüleri: </b>Kaç eşzamanlı kullanıcıya hizmet veriyorsunuz ve kullanımlarında bir örüntü var mı (örneğin, mesai saatlerinde daha fazla etkinlik gibi)?</p>
+      </li>
+    </ul>
+    <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Bir yapay zeka ürününü geliştirmenin erken aşamalarında, bu soruların yanıtları net olmayabilir. Bu erken aşamada, özel/ayrılmış çıkarıma yatırım yapmak yerine, mümkün olduğunca hazır <i>API</i>'leri kullanmak genellikle daha iyidir. Ürün ölçeklendikçe gereksinimler netleşir ve çıkarım mühendisliği üzerinde durmaya değer bir uğraş haline gelir.</p>
+    <div class="niv1" id="niv1-003">
+      <h3 epub:type="title" class="int_niv1" lang="tr-TR">1.1   Ölçek ve Uzmanlaşma</h3>
+      <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Ürününüze yapay zeka modelleri eklemenin iki yolu vardır:</p>
+      <ul class="liste_puce">
+        <li>
+          <p class="liste_txt_courant_ssalinea" lang="tr-TR"><b>Paylaşımlı çıkarım:</b> Trafiğinizi belirli bir model için herkese açık bir <i>API</i> uç noktasına gönderirsiniz ve milyon <i>token</i> başına veya başka bir tüketim tabanlı metriğe göre ödeme yaparsınız.</p>
+        </li>
+        <li>
+          <p class="liste_txt_courant_ssalinea" lang="tr-TR"><b>Özel/ayrılmış dağıtımlar:</b> <i>GPU</i> kiralayıp yalnızca uygulamanız için bir çıkarım servisi kurarsınız ve <i>GPU</i> saati başına ödeme yaparsınız (ya da <i>GPU</i>'ları satın alıp şirket içinde kurarsınız).</p>
+        </li>
+      </ul>
+      <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Paylaşımlı çıkarıma karşı özel çıkarım tartışması, kapalı modellere karşı açık modeller tartışmasıyla tam olarak aynı şey değildir – açık modeller için bolca paylaşımlı uç nokta vardır ve birçok model laboratuvarı büyük müşterilerine kapalı modelleri için bir tür özel kurulum sunar. Yine de açık modelleri benimsemenin temel motivasyonlarından biri, kısıtlamasız özel çıkarımın önünü açmasıdır.</p>
+      <p class="bl"> </p>
+      <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR"><span epub:type="pagebreak" id="page_27" title="27" role="doc-pagebreak"/>Çoğu yapay zeka ürünü, ürün-pazar uyumu ararken ya da büyümenin erken aşamalarındayken ödünleşimler mantıklı olduğu için <i>token</i> başına ödemeli <i>API</i>'lerle başlar.</p>
+      <div class="tableau" id="tableau-001">
+        <div class="table-align">
+          <table style="border-collapse:collapse; border:outset 0pt; width:100%" border="1">
+            <colgroup style="padding:7px;">
+            <col style="padding:7px;"/>
+            <col style="width:50%;"/>
+            </colgroup>
+            <tbody>
+              <tr style="padding:7px;">
+                <td style="border:1px solid currentColor;padding:5px;vertical-align:top"><p class="txt_courant_ssalinea" lang="tr-TR"><b>Paylaşımlı çıkarımın artıları</b></p></td>
+                <td style="border:1px solid currentColor;padding:5px;vertical-align:top"><p class="txt_courant_ssalinea" lang="tr-TR"><b>Paylaşımlı çıkarımın eksileri</b></p></td>
+              </tr>
+              <tr style="padding:7px;">
+                <td style="border:1px solid currentColor;padding:5px;vertical-align:top"><p class="txt_courant_ssalinea" lang="tr-TR">Sıfır ek yük, yalnızca tüketim için ödeme</p></td>
+                <td style="border:1px solid currentColor;padding:5px;vertical-align:top"><p class="txt_courant_ssalinea" lang="tr-TR">Maliyet kullanımla doğrusal olarak ölçeklenir</p></td>
+              </tr>
+              <tr style="padding:7px;">
+                <td style="border:1px solid currentColor;padding:5px;vertical-align:top"><p class="txt_courant_ssalinea" lang="tr-TR">Soğuk başlangıç süresi yok, model her zaman kullanılabilir</p></td>
+                <td style="border:1px solid currentColor;padding:5px;vertical-align:top"><p class="txt_courant_ssalinea" lang="tr-TR">Sağlayıcının çalışma süresi ürünün çalışma süresini sınırlar, gürültülü komşular</p></td>
+              </tr>
+              <tr style="padding:7px;">
+                <td style="border:1px solid currentColor;padding:5px;vertical-align:top"><p class="txt_courant_ssalinea" lang="tr-TR">Minimum mühendislik işi, yalnızca bir <i>API</i> anahtarı gerekir</p></td>
+                <td style="border:1px solid currentColor;padding:5px;vertical-align:top"><p class="txt_courant_ssalinea" lang="tr-TR">Gecikme, model kalitesi veya hız sınırları üzerinde kontrol yok</p></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Zamanla, yapay zeka ürünlerini özel/ayrılmış dağıtımlara kaydırmak üç nedenden ötürü gereklidir:</p>
+      <ul class="liste_puce">
+        <li>
+          <p class="liste_txt_courant_ssalinea" lang="tr-TR"><b>Ölçek: </b>Trafiğinizin hacmi, milyon <i>token</i> başına ödeme yapmaktansa <i>GPU</i> başına ödeme yapmanın daha ekonomik olacağı düzeydedir.</p>
+        </li>
+        <li>
+          <p class="liste_txt_courant_ssalinea" lang="tr-TR"><b>Uzmanlaşma: </b>Özel veya <i>fine-tune</i> edilmiş bir model çalıştırıyorsunuz ya da belirli gecikme veya çalışma süresi gereksinimleriniz var.</p>
+        </li>
+        <li>
+          <p class="liste_txt_courant_ssalinea" lang="tr-TR"><b>Orkestrasyon: </b>Ürününüz birden çok modele ve çok adımlı <i>pipeline</i>'lara dayanıyor ve ağ gecikmesini ve dağıtım karmaşıklığını en aza indirmeniz gerekiyor.</p>
+        </li>
+      </ul>
+      <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Özel/ayrılmış dağıtımlara geçiş, kendi çıkarım mühendisliğinizin sorumluluğunu size yükler. Bu size esneklik ve kontrol kazandırır ama mühendislik yüzey alanınızı artırır ve çıkarıma harcadığınız aylık tutarın alt sınırını yükseltir. Yalnızca net ve acil bir iş ihtiyacı ortaya çıktığında geçiş yapın.</p>
+    </div>
+    <!--@@niv1-->
+    <div class="niv1" id="niv1-004">
+      <h3 epub:type="title" class="int_niv1" lang="tr-TR">1.2   Uygulamanız Hakkında</h3>
+      <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Alacağınız her çıkarım mühendisliği kararı, kullanım senaryonuza bağlı olacaktır.</p>
+      <p class="bl"> </p>
+      <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Bir okulda öğrenci arayan bir spor koçu düşünün. Hangi öğrencilerle konuşmak ister? Bu tamamen hangi sporu çalıştırdığına bağlıdır – basketbol koçu sınıftaki en uzun boylu çocukları isterken, jimnastik koçu en kısa boylular arasından seçim yapar.</p>
+      <p class="bl"> </p>
+      <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR"><span epub:type="pagebreak" id="page_28" title="28" role="doc-pagebreak"/>Benzer şekilde, çıkarım sisteminizin nasıl kullanılacağı, onu nasıl inşa edeceğinizi belirler.</p>
+      <p class="bl"> </p>
+      <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Çıkarım mühendislerinin en yüksek genellik düzeyinde inşa etmesi gereken iki durum vardır:</p>
+      <ul class="liste_puce">
+        <li>
+          <p class="liste_txt_courant_ssalinea" lang="tr-TR"><b>Temel modeller:</b> Kendi modelinizi eğittiniz ve tüketimi doğrudan herkese açık, paylaşımlı bir çıkarım <i>API</i>'si üzerinden satacaksınız; bu nedenle birçok kullanım örüntüsünü desteklemeniz gerekiyor.</p>
+        </li>
+        <li>
+          <p class="liste_txt_courant_ssalinea" lang="tr-TR"><b>Çıkarım platformları:</b> İster şirket içi ister bir ürün olarak bir çıkarım platformu inşa ediyorsunuz ve herhangi bir modeli ve herhangi bir kullanım senaryosunu desteklemeniz gerekiyor.</p>
+        </li>
+      </ul>
+      <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Ama çoğu yapay zeka odaklı uygulama, kod düzenleyiciler veya müşteri hizmetleri ajanları gibi, yapay zekanın yeni bir kullanıcı deneyimi yaratmak için kullanıldığı dikey uygulamalardır. Dikey yapay zeka odaklı uygulamalar için çıkarım inşa ederken, kullanım senaryonuzu mümkün olduğunca spesifikleştirerek elinizden geldiğince çok kısıt eklemek istersiniz.</p>
+      <div class="niv2" id="niv2-001">
+        <h4 epub:type="title" class="int_niv2" lang="tr-TR">1.2.1   Yapay Zeka Odaklı Uygulamalar</h4>
+        <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Üretken yapay zeka modelleri, sektörler ve alanlar genelinde yeni bir uygulama sınıfının önünü açtı. Her uygulama kategorisi farklı modellere ve modalitelere dayanır ve özel olarak uyarlanmış çıkarım gerektirir.</p>
+        <div class="tableau" id="tableau-002"><span epub:type="pagebreak" id="page_29" title="29" role="doc-pagebreak"/>
+          <div class="table-align">
+            <table style="border-collapse:collapse; border:outset 0pt; width:100%" border="1">
+              <colgroup style="padding:7px;"><col style="width:24%;"/><col style="width:38%;"/><col style="width:38%;"/></colgroup>
+              <thead>
+                <tr style="padding:7px;">
+                  <th style="border:1px solid currentColor;padding:5px;vertical-align:top"><b>Kategori</b></th>
+                  <th style="border:1px solid currentColor;padding:5px;vertical-align:top"><b>Örnek</b></th>
+                  <th style="border:1px solid currentColor;padding:5px;vertical-align:top"><b>Değerlendirmeler</b></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="padding:7px;">
+                  <td style="border:1px solid currentColor;padding:5px;vertical-align:top"><p class="txt_courant_ssalinea" lang="tr-TR">Ajanlar</p></td>
+                  <td style="border:1px solid currentColor;padding:5px;vertical-align:top"><p class="txt_courant_ssalinea" lang="tr-TR">Satış ekipleri için potansiyel müşteri arama ajanı</p></td>
+                  <td style="border:1px solid currentColor;padding:5px;vertical-align:top"><p class="txt_courant_ssalinea" lang="tr-TR">Bir kullanıcı eylemi birçok çıkarım çağrısını tetikler</p></td>
+                </tr>
+                <tr style="padding:7px;">
+                  <td style="border:1px solid currentColor;padding:5px;vertical-align:top"><p class="txt_courant_ssalinea" lang="tr-TR">Sohbet</p></td>
+                  <td style="border:1px solid currentColor;padding:5px;vertical-align:top"><p class="txt_courant_ssalinea" lang="tr-TR"><i>RAG</i> destekli ön saf müşteri destek sohbeti</p></td>
+                  <td style="border:1px solid currentColor;padding:5px;vertical-align:top"><p class="txt_courant_ssalinea" lang="tr-TR">İlk <i>token</i> süresi sohbetin hızlı hissettirmesini sağlar</p></td>
+                </tr>
+                <tr style="padding:7px;">
+                  <td style="border:1px solid currentColor;padding:5px;vertical-align:top"><p class="txt_courant_ssalinea" lang="tr-TR">Ses</p></td>
+                  <td style="border:1px solid currentColor;padding:5px;vertical-align:top"><p class="txt_courant_ssalinea" lang="tr-TR">Diller arası gerçek zamanlı çeviri</p></td>
+                  <td style="border:1px solid currentColor;padding:5px;vertical-align:top"><p class="txt_courant_ssalinea" lang="tr-TR">Doğal bir konuşma için uçtan uca gecikme</p></td>
+                </tr>
+                <tr style="padding:7px;">
+                  <td style="border:1px solid currentColor;padding:5px;vertical-align:top"><p class="txt_courant_ssalinea" lang="tr-TR">Medya</p></td>
+                  <td style="border:1px solid currentColor;padding:5px;vertical-align:top"><p class="txt_courant_ssalinea" lang="tr-TR">Kıyafet, ayakkabı ve mücevher için sanal deneme</p></td>
+                  <td style="border:1px solid currentColor;padding:5px;vertical-align:top"><p class="txt_courant_ssalinea" lang="tr-TR">Çıktı kalitesi ile hız arasında denge</p></td>
+                </tr>
+                <tr style="padding:7px;">
+                  <td style="border:1px solid currentColor;padding:5px;vertical-align:top"><p class="txt_courant_ssalinea" lang="tr-TR">Arama</p></td>
+                  <td style="border:1px solid currentColor;padding:5px;vertical-align:top"><p class="txt_courant_ssalinea" lang="tr-TR">Hukuki belge keşfi</p></td>
+                  <td style="border:1px solid currentColor;padding:5px;vertical-align:top"><p class="txt_courant_ssalinea" lang="tr-TR">Çevrimdışı korpus oluşturma ile çevrimiçi kullanıcı istekleri arasındaki denge</p></td>
+                </tr>
+                <tr style="padding:7px;">
+                  <td style="border:1px solid currentColor;padding:5px;vertical-align:top"><p class="txt_courant_ssalinea" lang="tr-TR">Öneri Sistemleri (RecSys)</p></td>
+                  <td style="border:1px solid currentColor;padding:5px;vertical-align:top"><p class="txt_courant_ssalinea" lang="tr-TR">E-ticaret ürün önerileri</p></td>
+                  <td style="border:1px solid currentColor;padding:5px;vertical-align:top"><p class="txt_courant_ssalinea" lang="tr-TR">Yüksek istek hacminde tutarlı gecikme</p></td>
+                </tr>
+                <tr style="padding:7px;">
+                  <td style="border:1px solid currentColor;padding:5px;vertical-align:top"><p class="txt_courant_ssalinea" lang="tr-TR">Tamamlama</p></td>
+                  <td style="border:1px solid currentColor;padding:5px;vertical-align:top"><p class="txt_courant_ssalinea" lang="tr-TR">IDE'de kodlama için Tab ile tamamlama</p></td>
+                  <td style="border:1px solid currentColor;padding:5px;vertical-align:top"><p class="txt_courant_ssalinea" lang="tr-TR">Kullanıcının yazma hızında tam tamamlama parçası</p></td>
+                </tr>
+                <tr style="padding:7px;">
+                  <td style="border:1px solid currentColor;padding:5px;vertical-align:top"><p class="txt_courant_ssalinea" lang="tr-TR">Moderasyon</p></td>
+                  <td style="border:1px solid currentColor;padding:5px;vertical-align:top"><p class="txt_courant_ssalinea" lang="tr-TR">Kullanıcı tarafından oluşturulan içeriği güvenlik için tarama</p></td>
+                  <td style="border:1px solid currentColor;padding:5px;vertical-align:top"><p class="txt_courant_ssalinea" lang="tr-TR">Uygun maliyetli kontroller için yüksek verim</p></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Bu, bugün inşa edilmekte olan yapay zeka odaklı uygulamaların çok küçük bir örneğidir, ama çıkarım mühendislerinin karşılaştığı değerlendirmelerin genişliğini gösterir. Modeller daha hızlı, daha ucuz ve daha akıllı hale geldikçe, bugün henüz hayal bile edilmemiş yeni kullanım senaryoları ortaya çıkacaktır.</p>
+      </div>
+      <div class="niv2" id="niv2-002">
+        <h4 epub:type="title" class="int_niv2" lang="tr-TR">1.2.2   Çevrimiçi ile Çevrimdışı</h4>
+        <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Çıkarım mühendisliğindeki temel ödünleşimlerden biri gecikmeye karşı verimdir. Düşük gecikme uygulamanızı hızlandırır, ama yüksek verim ölçekte onu daha ucuz hale getirir çünkü aynı sayıda kullanıcı için daha az <i>GPU</i> kullanabilirsiniz.</p>
+        <p class="bl"> </p>
+        <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Çoğu yapay zeka uygulaması – kod tamamlama, sohbet, sesli ajanlar – gerçek zamanlı çalışan çevrimiçi uygulamalardır. Her <i>API</i> çağrısının diğer ucunda sabırsız bir kullanıcı beklediğinden, bu çevrimiçi uygulamalar gecikme için optimize edilmelidir.</p>
+        <p class="bl"> </p>
+        <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Ancak bazı uygulamaların çevrimdışı toplu (<i>batch</i>) çıkarım ihtiyaçları vardır. Çevrimdışı işler, tek tek her isteğin iyi bir kullanıcı deneyimi için çok yavaş kalacağı ama sistemin bütün olarak saat başına paralel şekilde çok daha fazla isteği işlediği yüksek verimli model dağıtımlarıyla daha iyi karşılanır.</p>
+        <p class="bl"> </p>
+        <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Bazı örnek çevrimdışı iş yükleri şunlardır:</p>
+        <ul class="liste_puce">
+          <li>
+            <p class="liste_txt_courant_ssalinea" lang="tr-TR"><b>Katalog transkripsiyonu:</b> Aranabilir hale getirmek için podcast'lerden, röportajlardan veya diğer ses kayıtlarından oluşan bir arşiv kataloğunu metne dökmek.</p>
+          </li>
+          <li>
+            <p class="liste_txt_courant_ssalinea" lang="tr-TR"><b>Belge işleme:</b> Bir belge kümesini düzenli aralıklarla <i>embedding</i>, dönüştürme veya analiz etme.</p>
+          </li>
+          <li>
+            <p class="liste_txt_courant_ssalinea" lang="tr-TR"><b>Korpus hazırlama:</b> Model eğitimi için devasa veri korpuslarını temizleme, <i>embedding</i> veya başka şekillerde hazırlama.</p>
+          </li>
+        </ul>
+        <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR"><span epub:type="pagebreak" id="page_30" title="30" role="doc-pagebreak"/>Hem çevrimiçi hem de çevrimdışı işler için kullanılan tek bir modele sahip olmak mümkündür. Bir konuşmadan metne model olan <i>Whisper</i>, hem gerçek zamanlı bir dikte uygulamasında hem de toplu bir transkripsiyon işinde kullanılabilir. Her iki kullanım senaryosunun da yeterli hacme sahip olduğu varsayıldığında, aynı model için biri gecikme diğeri verim için optimize edilmiş iki ayrı dağıtım oluşturmak daha uygun maliyetli olacaktır.</p>
+      </div>
+      <div class="niv2" id="niv2-003">
+        <h4 epub:type="title" class="int_niv2" lang="tr-TR">1.2.3   Tüketici ile B2B</h4>
+        <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Tüketiciler ve işletmeler için inşa edilen uygulamaların farklı çıkarım ihtiyaçları vardır.</p>
+        <p class="bl"> </p>
+        <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Tüketici uygulamaları genellikle maliyete çok daha duyarlıdır ve daha az öngörülebilir kullanım örüntülerine sahiptir. Birçok tüketici yapay zeka uygulaması viral olacak şekilde tasarlanır ve tek bir lansman veya pazarlama kampanyası bir gecede kullanımda ani bir sıçrama yaratabilir.</p>
+        <p class="bl"> </p>
+        <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Tüketici uygulamaları üzerinde çalışan çıkarım mühendisleri, gecikmeyi ve kullanılabilirliği makul bir standartta tutarken marjinal maliyete ve esnekliğe öncelik vermelidir.</p>
+        <p class="bl"> </p>
+        <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">İşletmeden işletmeye (B2B) ürünler genellikle daha iyi kâr marjlarına ve daha istikrarlı kullanıma sahiptir, ama yüksek kullanılabilirlik ve tutarlı şekilde düşük gecikme gerektirir. Gelir akışında yer alan kritik öneme sahip yazılımlar yüksek bir performans ve güvenilirlik standardına tabidir.</p>
+        <p class="bl"> </p>
+        <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">İşletmeler için inşa eden çıkarım mühendisleri, maliyet ve ölçek önemli ikincil kaygılar olsa da, gecikme ve çalışma süresine öncelik vermelidir.</p>
+        <p class="bl"> </p>
+        <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Hem tüketici hem de işletme uygulamalarında, özellikle düzenlemeye tabi sektörlerde uyumluluk altyapı seçeneklerini sınırlayabilir. Bazı temel değerlendirmeler şunlardır:</p>
+        <ul class="liste_puce">
+          <li>
+            <p class="liste_txt_courant_ssalinea" lang="tr-TR"><b>Veri egemenliği:</b> <i>GPU</i>'larınız kullanıcı verisi göndermenize izin verilen bir coğrafi bölgede mi bulunuyor?</p>
+          </li>
+          <li>
+            <p class="liste_txt_courant_ssalinea" lang="tr-TR"><b>Kullanıcı gizliliği:</b> Modelinizin girdileri ve çıktıları gizli ve güvenli tutuluyor mu?</p>
+          </li>
+          <li>
+            <p class="liste_txt_courant_ssalinea" lang="tr-TR"><b>Mevzuat uyumluluğu:</b> Siz ve altyapınızı sağlayan sağlayıcılarınız ilgili tüm düzenlemelere uyumlu mu?</p>
+          </li>
+        </ul>
+        <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR"><span epub:type="pagebreak" id="page_31" title="31" role="doc-pagebreak"/>Çıkarım mühendisleri, işlettikleri altyapının uyumlu olduğundan emin olmak için güvenlik ve hukuk uzmanlarıyla yakın çalışmalıdır.</p>
+      </div>
+    </div>
+    <!--@@niv1-->
+    <div class="niv1" id="niv1-005">
+      <h3 epub:type="title" class="int_niv1" lang="tr-TR">1.3   Model Seçimi</h3>
+      <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Diğer her şey eşit olduğunda – donanım, <i>runtime</i>, optimizasyonlar, mimari – daha az parametreli, daha küçük bir model üzerinde çıkarım, daha fazla parametreli, daha büyük bir model üzerinde çıkarımdan daha hızlı ve daha ucuz olacaktır.</p>
+      <p class="bl"> </p>
+      <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Bu yüzden model performansı optimizasyonundaki en önemli karar, çıkarım motoru ya da spekülasyon algoritması değil, en başta hangi modelle çalışmayı seçtiğinizdir.</p>
+      <p class="bl"> </p>
+      <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Erken aşama ürünler üzerinde yineleme yapan yapay zeka mühendisleri, <i>Kimi</i> ve <i>DeepSeek</i> gibi güçlü öncü modeller (ya da <i>GPT</i> ve <i>Gemini</i> gibi kapalı modeller) için hazır, <i>token</i> başına ödemeli <i>API</i>'leri kullanmalıdır. Ürün-pazar uyumundan önce, kendi çıkarımınızı yapmaya zaman veya para harcamaya değmez.</p>
+      <p class="bl"> </p>
+      <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Ama ölçeklenme zamanı geldiğinde tam tersi tavsiye geçerlidir. Eldeki görevi halledecek kadar akıllı olan, en küçük ve çalıştırması en kolay modeli bulun – ya da yaratın. Çoğu durumda bunun yine de trilyon parametreli bir öncü model olması gerekecektir. Ama daha küçük, daha ucuz, daha hızlı bir modelin işi görüp göremeyeceğini kontrol etmek her zaman değerlidir.</p>
+      <p class="bl"> </p>
+      <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Hangi modeli seçtiğiniz, hangi çıkarım optimizasyonlarına erişebileceğinizi de etkiler. Çıkarım motorları, farklı model mimarilerine verdikleri destek derinliği açısından farklılık gösterir. Performans araç ekosisteminde sağlam destek bulacağınızdan emin olmak için popüler model mimarilerine bağlı kalın.</p>
+      <div class="niv2" id="niv2-004">
+        <h4 epub:type="title" class="int_niv2" lang="tr-TR">1.3.1   Model Değerlendirme</h4>
+        <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Model değerlendirme, ya da kısaca eval, model zekasını sistematik olarak ölçme pratiğidir.</p>
+        <p class="bl"> </p>
+        <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Güvenilirliği yüksek model değerlendirmesi, çıkarım mühendisliği için bir ön koşuldur. Eval'ler çıkarım mühendislerine şu konularda yardımcı olur:</p>
+        <ul class="liste_puce">
+          <li>
+            <p class="liste_txt_courant_ssalinea" lang="tr-TR"><b>Zamanı akıllıca harcama: </b>Bir modeli hızlandırmaya yatırım yapmadan önce, eval'ler modelin işe yaradığından emin olmanızı sağlar.</p>
+          </li>
+          <li>
+            <p class="liste_txt_courant_ssalinea" lang="tr-TR"><span epub:type="pagebreak" id="page_32" title="32" role="doc-pagebreak"/><b>Bir temel çizgi (baseline) belirleme: </b>Bazı performans optimizasyon teknikleri model kalitesini düşürme riski taşır, bu da karşılaştırma yapacak bir temel çizgi gerektirir.</p>
+          </li>
+        </ul>
+        <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Model yeteneklerini MMLU veya SWE-bench gibi ortak görevlere karşı ölçen standart zeka benchmark'larının aksine, eval'ler belirli ürünlere, alanlara ve görevlere göre özelleştirilir.</p>
+        <p class="bl"> </p>
+        <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Zeka benchmark'ları, modelleri kısa listeye almak için kullanışlıdır, ama doyuma ulaşmış, hatta manipüle edilir hale gelmiştir. Goodhart Yasası, “bir ölçüt hedef haline geldiğinde, iyi bir ölçüt olmaktan çıkar” der ve bu, öncü laboratuvarların her model çıkışında yeni dünya rekoru zeka benchmark'ları gösterme konusundaki güçlü teşvikleri için de geçerlidir.</p>
+        <p class="bl"> </p>
+        <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Genel model zekasını ölçmenin, diğer modellere karşı birebir kazanma oranı üzerinden Elo puanlaması gibi daha iyi yolları olsa da, bir modelin uygulamanız için nasıl performans gösterdiğini doğrudan ölçmenin yerini hiçbir şey tutamaz.</p>
+        <p class="bl"> </p>
+        <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Faydalı bir model değerlendirme çalışması yapmak için birkaç ipucu:</p>
+        <ul class="liste_puce">
+          <li>
+            <p class="liste_txt_courant_ssalinea" lang="tr-TR"><b>Verinize bakın: </b>Eval sonuçlarını, ürün ve problem alanına dair sezgilerinizle karşılaştırarak kontrol edin.</p>
+          </li>
+          <li>
+            <p class="liste_txt_courant_ssalinea" lang="tr-TR"><b>Kesin olun: </b>Bir modelin çözmesi gereken en zor problemler hakkında net bir fikre sahip olun ve değerlendirmeyi oraya odaklayın.</p>
+          </li>
+          <li>
+            <p class="liste_txt_courant_ssalinea" lang="tr-TR"><b>Araçları kullanın: </b>Yapay zeka mühendisliğindeki temel problemlerden birinde tekerleği yeniden icat etmeyin.</p>
+          </li>
+        </ul>
+        <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Ek B, eval'ler hakkında araç önerileri ve daha fazla okuma kaynağı içerir.</p>
+      </div>
+      <div class="niv2" id="niv2-005">
+        <h4 epub:type="title" class="int_niv2" lang="tr-TR">1.3.2   Alana Özgü Kalite için Fine-Tuning</h4>
+        <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR"><i>Fine-tuning</i>, önceden eğitilmiş bir temel modeli alıp yeni veri sunarak belirli bir kullanım senaryosuna uyarlama pratiğidir.</p>
+        <figure class="fig" id="fig-009">
+          <div class="imagelarge"><img src="images/fig_8.jpg" alt="" class="imagelarge" role="presentation"/></div>
+          <figcaption class="leg">
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR"><b><span epub:type="pagebreak" id="page_33" title="33" role="doc-pagebreak"/>Şekil 1.2: </b>Bir modele <i>fine-tuning</i> yapmak, genel mimariyi aynı tutarken model ağırlıklarının değerlerini değiştirir.</p>
+          </figcaption>
+        </figure>
+        <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Küçük bir modele eval'lerinizi geçecek şekilde <i>fine-tuning</i> yapabilirseniz, çıkarım için gecikme ve maliyet hedeflerinize daha kolay ulaşmanızı sağlarsınız.</p>
+        <p class="bl"> </p>
+        <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR"><i>Fine-tuning</i>'in etkili olduğu bir alanın harika bir örneği, İngilizceyi veritabanlarını sorgulamak için kullanılan bir dil olan SQL'e çevirmektir.</p>
+        <p class="bl"> </p>
+        <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Genel amaçlı kodlama modelleri SQL yazmakta iyidir, ama bu modeller yüzlerce milyar parametreye sahiptir. SQL nispeten kısıtlı bir dildir, bu yüzden doğal dil komutlarından yalnızca SQL sorguları üretmesi gereken bir uygulama için, yalnızca birkaç milyar parametreli, <i>fine-tune</i> edilmiş minik bir model, bu spesifik görevde eşdeğer performansa ulaşabilir.</p>
+        <p class="bl"> </p>
+        <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Metinden SQL'e dönüştürme uç bir örnektir – birçok alan bu kadar büyük bir model boyutu küçülmesini desteklemez – ama net şekilde sınırlandırılmış bir alan, güçlü bir değerlendirme kriterleri kümesi ve <i>fine-tuning</i> için kullanılacak yüksek kaliteli etiketlenmiş veriyle nelerin mümkün olduğunu gösterir.</p>
+      </div>
+      <div class="niv2" id="niv2-006">
+        <h4 epub:type="title" class="int_niv2" lang="tr-TR">1.3.3   Damıtma</h4>
+        <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Ya büyük bir modelin zekasının çoğunu, onun bir kesri kadar küçük bir boyutta koruyabilseydiniz? Damıtmanın arkasındaki fikir budur.</p>
+        <figure class="fig" id="fig-010">
+          <div class="imagelarge"><img src="images/fig_9.jpg" alt="" class="imagelarge" role="presentation"/></div>
+          <figcaption class="leg">
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR"><b><span epub:type="pagebreak" id="page_34" title="34" role="doc-pagebreak"/>Şekil 1.3: </b>Damıtma, büyük bir modelin davranışını daha küçük, daha verimli bir modelde korur.</p>
+          </figcaption>
+        </figure>
+        <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Damıtma, büyük bir “öğretmen” modeli kullanarak daha küçük bir “öğrenci” modeli, büyük modelin davranışını taklit edecek şekilde eğitme sürecidir. Modelin girdi-çıktı çiftleri üzerinde eğitildiği sentetik veriyle <i>fine-tuning</i>'den farklı olarak, damıtma öğrenci modele yalnızca öğretmen modelin nihai yanıtlarını değil, gerçek olasılık dağılımlarını da gösterir.</p>
+        <p class="bl"> </p>
+        <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR"><i>Fine-tuning</i> bir modele belirli bir alanda daha iyi performans göstermeyi öğretirken, damıtma modele daha büyük bir modelin davranışını – iyisiyle kötüsüyle – nasıl taklit edeceğini öğretir.</p>
+        <p class="bl"> </p>
+        <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Damıtma, gerçek dünyada <i>fine-tuning</i>'e kıyasla önemli ölçüde daha az kullanılır.</p>
+        <p class="bl"> </p>
+        <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Bir öncü laboratuvar farklı boyutlarda bir model ailesi yayımladığında, küçük modeller genellikle büyük modellerden damıtılmaz. Bunun yerine, büyük modellerin önyargılarının küçük modelleri yapay olarak sınırlamasını önlemek için modeller bağımsız olarak eğitilir. Ama laboratuvar yalnızca büyük bir model eğitirse, damıtma bu modeli daha erişilebilir hale getirebilir.</p>
+        <p class="bl"> </p>
+        <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Ocak 2025'te, açık model araştırma laboratuvarı <i>DeepSeek</i>, o dönemki amiral gemisi akıl yürütme modeli <i>DeepSeek-R1</i>'i yayımladı. Model çok büyük olduğundan (671 milyar parametre), o dönemin en popüler açık model mimarileri olan <i>Llama</i> 3 ve <i>Qwen</i> 2.5 üzerine kurulmuş damıtılmış versiyonlarını da yayımladılar.</p>
+        <p class="bl"> </p>
+        <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR"><span epub:type="pagebreak" id="page_35" title="35" role="doc-pagebreak"/>Bu damıtılmış modeller, daha düşük zeka benchmark skorlarına sahip olsa da, ana <i>DeepSeek-R1</i> modeline benzer akıl yürütme davranışı sergiledi; ayrıca damıtılmış modeller nispeten küçüktü ve <i>Llama</i> ile <i>Qwen</i> mimarileri için mevcut performans çalışmalarından faydalanabiliyordu.</p>
+        <p class="bl"> </p>
+        <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Bu kitabın yayımlandığı tarihte, bu <i>DeepSeek-R1</i> damıtmaları, ses transkripsiyonu için <i>Whisper</i> gibi modellerin ve bazı görüntü üretim modellerinin damıtmalarıyla birlikte <i>Hugging Face</i>'teki en popüler damıtılmış modeller arasında yer almaya devam ediyor.</p>
+      </div>
+    </div>
+    <!--@@niv1-->
+    <div class="niv1" id="niv1-006">
+      <h3 epub:type="title" class="int_niv1" lang="tr-TR">1.4   Gecikme ve Verimi Ölçmek</h3>
+      <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR"><i>LLM</i>'ler için en yaygın iki performans metriği <i>TTFT</i> (ilk <i>token</i>'a kadar geçen süre) ve <i>TPS</i>'tir (saniyedeki <i>token</i> sayısı). <i>LLM</i>'lerin ötesinde modaliteye özgü metrikler için bkz. <a class="renv" href="p7.xhtml#chap-007">bölüm 6</a>.</p>
+      <div class="tableau" id="tableau-003">
+        <div class="table-align">
+          <table style="border-collapse:collapse; border:outset 0pt; width:100%" border="1">
+            <colgroup style="padding:7px;">
+            <col style="padding:7px;"/>
+            <col style="width:50%;"/>
+            </colgroup>
+            <tbody>
+              <tr style="padding:7px;">
+                <td style="border:1px solid currentColor;padding-top:8px;padding-bottom:8px;padding-left:5px;padding-right:5px;vertical-align:top"><p class="txt_courant_ssalinea" lang="tr-TR"><b>İlk <i>token</i>'a kadar geçen süre (<i>TTFT</i>)</b></p></td>
+                <td style="border:1px solid currentColor;padding-top:8px;padding-bottom:8px;padding-left:5px;padding-right:5px;vertical-align:top"><p class="txt_courant_ssalinea" lang="tr-TR"><b>Saniyedeki <i>token</i> sayısı (<i>TPS</i>)</b></p></td>
+              </tr>
+              <tr style="padding:7px;">
+                <td style="border:1px solid currentColor;padding-top:7px;padding-bottom:7px;padding-left:5px;padding-right:5px;vertical-align:top"><p class="txt_courant_ssalinea" lang="tr-TR">Akış (streaming) çıktıda, bir kullanıcının ilk çıktı <i>token</i>'ını görmesi ne kadar sürer?</p></td>
+                <td style="border:1px solid currentColor;padding-top:7px;padding-bottom:7px;padding-left:5px;padding-right:5px;vertical-align:top"><p class="txt_courant_ssalinea" lang="tr-TR">İlk <i>token</i> üretildikten sonra kullanıcı saniyede kaç <i>token</i> alır?</p></td>
+              </tr>
+              <tr style="padding:7px;">
+                <td style="border:1px solid currentColor;padding-top:7px;padding-bottom:7px;padding-left:5px;padding-right:5px;vertical-align:top"><p class="txt_courant_ssalinea" lang="tr-TR">Hesaplama sınırlı (compute-bound) <i>prefill</i>'e dayanır</p></td>
+                <td style="border:1px solid currentColor;padding-top:7px;padding-bottom:7px;padding-left:5px;padding-right:5px;vertical-align:top"><p class="txt_courant_ssalinea" lang="tr-TR">Bant genişliği sınırlı (bandwidth-bound) <i>decode</i>'a dayanır</p></td>
+              </tr>
+              <tr style="padding:7px;">
+                <td style="border:1px solid currentColor;padding-top:7px;padding-bottom:7px;padding-left:5px;padding-right:5px;vertical-align:top"><p class="txt_courant_ssalinea" lang="tr-TR">Daha düşük <i>TTFT</i> == daha iyi gecikme</p></td>
+                <td style="border:1px solid currentColor;padding-top:7px;padding-bottom:7px;padding-left:5px;padding-right:5px;vertical-align:top"><p class="txt_courant_ssalinea" lang="tr-TR">Daha yüksek <i>TPS</i> == daha iyi gecikme</p></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR"><i>TTFT</i> net bir terim olsa da, <i>TPS</i> daha az kesindir. <i>TPS</i>, bir gecikme metriği (kullanıcı başına saniyedeki <i>token</i> sayısı) veya bir verim metriği (tüm çıkarım servisi için saniyedeki <i>token</i> sayısı) olabilir.</p>
+      <p class="bl"> </p>
+      <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Çoğu insan <i>TPS</i>'i kullanıcı başına bir gecikme metriği anlamında kullanır. Gerektiğinde daha spesifik terimler kullanın:</p>
+      <ul class="liste_puce">
+        <li>
+          <p class="liste_txt_courant_ssalinea" lang="tr-TR"><b>Algılanan <i>TPS</i>:</b> İlk <i>token</i>'dan sonra kullanıcı başına gözlemlenen saniyedeki <i>token</i> sayısı (gecikme).</p>
+        </li>
+        <li>
+          <p class="liste_txt_courant_ssalinea" lang="tr-TR"><b>Toplam <i>TPS</i>: </b>Çıkarım servisi tarafından her saniye üretilen toplam <i>token</i> sayısı (verim).</p>
+        </li>
+        <li>
+          <p class="liste_txt_courant_ssalinea" lang="tr-TR"><b><i>Token</i>'lar arası gecikme (<i>ITL</i>): </b>Ardışık <i>token</i>'lar arasındaki süre. 10 milisaniyelik bir <i>ITL</i>, kullanıcı başına saniyede 100 <i>token</i>'a denk gelir.</p>
+        </li>
+      </ul>
+      <figure class="fig" id="fig-011">
+        <div class="imagelarge"><img src="images/fig_10.jpg" alt="" class="imagelarge" role="presentation"/></div>
+        <figcaption class="leg">
+          <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR"><b><span epub:type="pagebreak" id="page_36" title="36" role="doc-pagebreak"/>Şekil 1.4: </b><i>TTFT</i>, ilk <i>token</i>'ı üretmek için geçen süredir; <i>TPS</i> ise sonraki <i>token</i>'ların ne kadar hızlı üretildiğini ölçer.</p>
+        </figcaption>
+      </figure>
+      <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR"><i>TTFT</i> ve <i>TPS</i> en yaygın olarak, çıktının kullanıcıya akış (streaming) şeklinde iletildiği sohbet botları gibi kullanıcıyla doğrudan etkileşen <i>LLM</i> sistemlerinde kullanılır. Bir ajan için araç çağrısı gibi diğer istekler için ise, <i>token</i>'lar tek başına anlamlı olmadığından gecikmeyi toplam yanıt süresi olarak ölçersiniz.</p>
+      <div class="niv2" id="niv2-007">
+        <h4 epub:type="title" class="int_niv2" lang="tr-TR">1.4.1   Gecikme Yüzdelikleri (Percentile)</h4>
+        <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Metrikleri tartışırken ve karşılaştırırken önemli bir ayrım, hangi yüzdeliği (percentile) ölçtüğünüzdür.</p>
+        <figure class="fig" id="fig-012">
+          <div class="imagelarge"><img src="images/fig_11.jpg" alt="" class="imagelarge" role="presentation"/></div>
+          <figcaption class="leg">
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR"><b>Şekil 1.5: </b>Ortalama gecikme, çıkarım sürelerinin sağa çarpık dağılımındaki aykırı değerler nedeniyle genellikle P50 gecikmesinden daha yüksektir.</p>
+          </figcaption>
+        </figure>
+        <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR"><span epub:type="pagebreak" id="page_37" title="37" role="doc-pagebreak"/>Saf yaklaşım, basitçe ortalama (mean) <i>TTFT</i> veya <i>TPS</i>'e bakmaktır. Ancak bu, hikâyenin tamamını anlatmaz. <i>LLM</i> toplam yanıt süresi genellikle çoğu sürenin bir mod etrafında yoğunlaştığı, ama aykırı değerlerin önemli ölçüde daha uzun sürebildiği sağa çarpık bir dağılımdır.</p>
+        <p class="bl"> </p>
+        <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Bu aykırı değerler, kullanıcı deneyimini ve bir ürüne duyulan güveni ciddi şekilde etkileyebilir. Etkileşimlerin onda birinin birkaç saniye sürmesi durumunda, çoğu etkileşimin hızlı hissettirmesi yeterli değildir.</p>
+        <p class="bl"> </p>
+        <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Bunun yerine, çıkarım mühendisleri gecikmeyi yüzdelikler (percentile) cinsinden ölçer.</p>
+        <div class="tableau" id="tableau-004">
+          <div class="table-align">
+            <table style="border-collapse:collapse; border:outset 0pt; width:100%" border="1">
+              <colgroup style="padding:7px;">
+              <col style="padding:7px;"/>
+              <col style="width:37.4%;"/>
+              <col style="width:50.69%;"/>
+              </colgroup>
+              <tbody>
+                <tr style="padding:7px;">
+                  <td style="border:1px solid currentColor;padding:5px;vertical-align:top"><p class="txt_courant_ssalinea" lang="tr-TR">P50</p></td>
+                  <td style="border:1px solid currentColor;padding:5px;vertical-align:top"><p class="txt_courant_ssalinea" lang="tr-TR">Medyan gecikme</p></td>
+                  <td style="border:1px solid currentColor;padding:5px;vertical-align:top"><p class="txt_courant_ssalinea" lang="tr-TR">Her 2 istekten 1'i daha yavaştır</p></td>
+                </tr>
+                <tr style="padding:7px;">
+                  <td style="border:1px solid currentColor;padding:5px;vertical-align:top"><p class="txt_courant_ssalinea" lang="tr-TR">P90</p></td>
+                  <td style="border:1px solid currentColor;padding:5px;vertical-align:top"><p class="txt_courant_ssalinea" lang="tr-TR">90. yüzdelik gecikme</p></td>
+                  <td style="border:1px solid currentColor;padding:5px;vertical-align:top"><p class="txt_courant_ssalinea" lang="tr-TR">Her 10 istekten 1'i daha yavaştır</p></td>
+                </tr>
+                <tr style="padding:7px;">
+                  <td style="border:1px solid currentColor;padding:5px;vertical-align:top"><p class="txt_courant_ssalinea" lang="tr-TR">P95</p></td>
+                  <td style="border:1px solid currentColor;padding:5px;vertical-align:top"><p class="txt_courant_ssalinea" lang="tr-TR">95. yüzdelik gecikme</p></td>
+                  <td style="border:1px solid currentColor;padding:5px;vertical-align:top"><p class="txt_courant_ssalinea" lang="tr-TR">Her 20 istekten 1'i daha yavaştır</p></td>
+                </tr>
+                <tr style="padding:7px;">
+                  <td style="border:1px solid currentColor;padding:5px;vertical-align:top"><p class="txt_courant_ssalinea" lang="tr-TR">P99</p></td>
+                  <td style="border:1px solid currentColor;padding:5px;vertical-align:top"><p class="txt_courant_ssalinea" lang="tr-TR">99. yüzdelik gecikme</p></td>
+                  <td style="border:1px solid currentColor;padding:5px;vertical-align:top"><p class="txt_courant_ssalinea" lang="tr-TR">Her 100 istekten 1'i daha yavaştır</p></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Ortalama gecikmeyi düşürmek önemli olsa da, iyi bir performans çalışması daha güvenilir bir kullanıcı deneyimi için P90/P99 gecikmelerini düşürmeye de odaklanır.</p>
+      </div>
+      <div class="niv2" id="niv2-008">
+        <h4 epub:type="title" class="int_niv2" lang="tr-TR">1.4.2   Uçtan Uca Metrikler</h4>
+        <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Metriklerdeki diğer önemli ayrım, yalnızca çıkarım süresini mi – <i>token</i> üretmek için gereken <i>GPU</i> üzerindeki süreyi – yoksa ağ gecikmesini ve sıra bekleme süresini de hesaba katan uçtan uca bir ölçümü mü ölçtüğünüzdür.</p>
+        <p class="bl"> </p>
+        <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Hem yalnızca çıkarıma ait hem de uçtan uca metrikleri bilmek değerlidir. Çıkarım süresi, model performansı çalışmanızın ne kadar etkili olduğunu gösterirken, uçtan uca metrikler kullanıcılarınızın uygulamanızın ne kadar hızlı olduğuna dair algısını ortaya koyar. Çıkarım süresi hızlı ama uçtan uca süre yavaşsa, dikkatinizi model performansı optimizasyonundan ziyade altyapıya yöneltin.</p>
+      </div>
+    </div>
+    <!--@@niv1--></div>
+</section>
+</body>
+</html>

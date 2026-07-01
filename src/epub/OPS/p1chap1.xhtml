@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml" xmlns:schema="http://schema.org/" xmlns:php="http://php.net/xsl" lang="tr-TR" xml:lang="tr-TR">
+<head>
+<meta charset="utf-8"/>
+<title>Çıkarım - Bölüm 0 - Çıkarım</title>
+<link rel="stylesheet" href="styles-lg.css" type="text/css"/>
+</head>
+<body epub:type="bodymatter" lang="tr-TR" xml:lang="tr-TR">
+<section class="chap" epub:type="chapter" id="chap-009" lang="tr-TR" role="doc-chapter"><span epub:type="pagebreak" id="page_17" title="17" role="doc-pagebreak"/>
+  <div class="chap_debut"><!--debut	--></div>
+  <h2 class="hi_chap"><span epub:type="title" class="chap_tit" lang="tr-TR"><span>Çıkarım</span></span></h2>
+  <div class="dev">
+    <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Çıkarım, üretken yapay zeka modelinin yaşam döngüsündeki ikinci aşamadır:</p>
+    <ul class="liste_puce">
+      <li>
+        <p class="liste_txt_courant_ssalinea" lang="tr-TR"><b>Eğitim:</b> Model ağırlıklarının verilerden öğrenilmesi süreci.</p>
+      </li>
+      <li>
+        <p class="liste_txt_courant_ssalinea" lang="tr-TR"><b>Çıkarım:</b> Üretken yapay zeka modellerinin canlı ortamda sunulması.</p>
+      </li>
+    </ul>
+    <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Geçtiğimiz on yılın makine öğrenmesi (ML) patlamasında, yüz binlerce veri bilimci ve ML mühendisi, ML modellerinin tüm yaşam döngüsüyle -hem eğitim hem de çıkarımla- tanıştı.</p>
+    <p class="bl"> </p>
+    <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Klasik ML modelleri için çıkarım nispeten basittir. <i>Baseten</i>'in ilk günlerinde, XGBoost gibi araçlarla oluşturulmuş modeller için hafif <i>CPU</i>'lar üzerinde basit bir yazılım yığınıyla çıkarım çalıştırıyorduk.</p>
+    <p class="bl"> </p>
+    <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Buna karşılık, üretken yapay zeka modelleri için çıkarım karmaşıktır. Model ağırlıklarını alıp birkaç <i>GPU</i> temin ederek çıkarımın büyük ölçekli canlı ortam kullanımı için yeterince hızlı ve güvenilir olmasını bekleyemezsiniz. Çıkarımı doğru yapmak üç katman gerektirir:</p>
+    <ul class="liste_puce">
+      <li>
+        <p class="liste_txt_courant_ssalinea" lang="tr-TR"><b><i>Runtime</i>:</b> Tek bir <i>GPU</i> destekli örnek üzerinde tek bir modelin performansını optimize etmek.</p>
+      </li>
+      <li>
+        <p class="liste_txt_courant_ssalinea" lang="tr-TR"><b>Altyapı:</b> Mükemmel çalışma süresini korurken, izole yapılar (silo) oluşturmadan kümeler, bölgeler ve bulutlar arasında ölçeklemek.</p>
+      </li>
+      <li>
+        <p class="liste_txt_courant_ssalinea" lang="tr-TR"><b>Araçlar (Tooling):</b> Çıkarım üzerinde çalışan mühendislere, kontrol ile üretkenliği dengeleyecek doğru soyutlama seviyesini sağlamak.</p>
+      </li>
+    </ul>
+    <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Bu üç katman, kritik önemdeki çıkarımı büyük ölçekte kaldırabilecek bir sistem oluşturmak için birlikte çalışmalıdır.</p>
+    <figure class="fig" id="fig-005">
+      <div class="image"><img src="images/fig_4.jpg" alt="" class="image" role="presentation"/></div>
+      <figcaption class="leg">
+        <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR"><b><span epub:type="pagebreak" id="page_18" title="18" role="doc-pagebreak"/>Şekil 0.1: </b>Eksiksiz bir çıkarım yığını hem <i>runtime</i> hem de altyapı optimizasyonlarını içerir.</p>
+      </figcaption>
+    </figure>
+    <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR"><i>Runtime</i> katmanı, bir <i>GPU</i> üzerinde (veya tek bir örnekte birden fazla <i>GPU</i> üzerinde) çalışan tek bir modelin mümkün olduğunca performanslı ve verimli çalışmasını sağlamaktan sorumludur.</p>
+    <p class="bl"> </p>
+    <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Bu katman, <i>CUDA</i>'dan <i>PyTorch</i>'a, <i>vLLM</i>, <i>SGLang</i> ve <i>TensorRT-LLM</i> gibi çıkarım motorlarına kadar uzanan sofistike bir yazılım yığınına dayanır. <i>FlashAttention</i> gibi <i>kernel</i>'ların sağladığı önemli performans kazanımlarıyla düşük seviyeli optimizasyon büyük önem taşır.</p>
+    <p class="bl"> </p>
+    <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR"><i>Runtime</i> katmanı, üretken yapay zeka modellerinde çıkarımın kendine özgü zorluklarına yeni araştırmaları uygulayan bir dizi model performans tekniğine dayanır:</p>
+    <ul class="liste_puce">
+      <li>
+        <p class="liste_txt_courant_ssalinea" lang="tr-TR"><span epub:type="pagebreak" id="page_19" title="19" role="doc-pagebreak"/><b><i>Batching</i> (toplu işleme):</b> Gelen istekleri paralel çalıştırarak, verimi artırmak için bunları <i>token</i> bazında birbirine örmek.</p>
+      </li>
+      <li>
+        <p class="liste_txt_courant_ssalinea" lang="tr-TR"><b>Önbellekleme (Caching):</b> Önek paylaşan istekler arasında <i>KV cache</i>'i -<i>attention</i> algoritmasının önbelleğe alınmış sonuçlarını- yeniden kullanmak.</p>
+      </li>
+      <li>
+        <p class="liste_txt_courant_ssalinea" lang="tr-TR"><b>Nicemleme (Quantization):</b> Daha fazla hesaplama gücüne erişmek ve bellek yükünü azaltmak için modelin seçili parçalarının hassasiyetini düşürmek.</p>
+      </li>
+      <li>
+        <p class="liste_txt_courant_ssalinea" lang="tr-TR"><b>Spekülasyon (Speculation):</b> Taslak <i>token</i>'lar oluşturup doğrulayarak, <i>decode</i> sırasında tek bir <i>forward pass</i>'te birden fazla <i>token</i> üretmek.</p>
+      </li>
+      <li>
+        <p class="liste_txt_courant_ssalinea" lang="tr-TR"><b>Paralellik (Parallelism):</b> Yeni darboğazlar yaratmadan büyük modelleri hızlandırmak için birden fazla <i>GPU</i>'dan verimli şekilde yararlanmak.</p>
+      </li>
+      <li>
+        <p class="liste_txt_courant_ssalinea" lang="tr-TR"><b>Disaggregation (ayrıştırma):</b> <i>LLM</i> çıkarımının iki aşamasını -<i>prefill</i> ve <i>decode</i>- bağımsız olarak ölçeklenen worker'lara ayırmak.</p>
+      </li>
+    </ul>
+    <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Bu model performans teknikleri yalnızca <i>LLM</i>'ler için değil, tüm modalitelerdeki modeller için kullanılır. Görsel-dil modelleri, <i>embedding</i> modelleri, otomatik konuşma tanıma, konuşma sentezi, görüntü üretimi ve video üretimi gibi modaliteler yapay zeka sistemlerinin yeteneklerini genişletir ve kendi çıkarım optimizasyonlarını gerektirir.</p>
+    <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Bu <i>runtime</i> optimizasyonları yeterli değildir. Bir model sunucusunun tek bir örneği ne kadar performanslı olursa olsun, sonunda kaldırabileceğinden daha fazla trafik alacaktır.</p>
+    <p class="bl"> </p>
+    <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Bu bir <i>CUDA</i> sorunu ya da <i>PyTorch</i> sorunu değildir. Bu, altyapı katmanında çözülmesi gereken bir sistem sorunudur.</p>
+    <p class="bl"> </p>
+    <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Altyapı sorunlarının niteliği her ölçek seviyesinde değişir. Başlangıçta sorunlar otomatik ölçeklemeyle ilgilidir: replikaları ne zaman ekleyip kaldıracağınızı bilmek ve bunu hızlıca nasıl yapacağınızı çözmek.</p>
+    <p class="bl"> </p>
+    <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Belirli bir ölçeğin -genellikle birkaç yüz <i>GPU</i>'nun- ötesinde, altyapı sorunları kapasiteyle tanımlanır. Yeterli <i>GPU</i>'ya erişmek için çıkarım mühendisleri iş yüklerini birden fazla bölgeye ve birden fazla bulut sağlayıcısına yaymaya başlar.</p>
+    <p class="bl"> </p>
+    <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Bu durum hızla izole yapılara (silo) yol açar; bir kümedeki modeller kaynak açısından kıt kalırken diğer kümelerde kullanılmayan kapasite bulunabilir. Altyapıda ölçeğin son seviyesi, mevcut tüm kaynakları tek, birleşik bir hesaplama havuzu olarak ele alan küresel bir sistemdir.</p>
+    <figure class="fig" id="fig-006">
+      <div class="image"><img src="images/fig_5.jpg" alt="" class="image" role="presentation"/></div>
+      <figcaption class="leg">
+        <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR"><b><span epub:type="pagebreak" id="page_20" title="20" role="doc-pagebreak"/>Şekil 0.2: </b>Burada şeması gösterilen speculation gibi <i>runtime</i> performans optimizasyonları, çıkarım gecikmesini iyileştirir.</p>
+      </figcaption>
+    </figure>
+    <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Özenle tasarlanmış çoklu bulut altyapısı, herhangi bir bölge veya bulut sağlayıcısındaki kesintilere karşı koruma sağlayarak güvenilirliği de artırır. Küresel uygulamalar için, çıkarımı son kullanıcılara yakın çalıştırmak uçtan uca gecikmeyi iyileştirir.</p>
+    <figure class="fig" id="fig-007">
+      <div class="imagelarge"><img src="images/fig_6.jpg" alt="" class="imagelarge" role="presentation"/></div>
+      <figcaption class="leg">
+        <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR"><b><span epub:type="pagebreak" id="page_21" title="21" role="doc-pagebreak"/>Şekil 0.3: </b>Model çıkarımını büyük ölçekte sunmak, birden fazla bulut hizmet sağlayıcısı genelinde kapasiteyi birleştirmeyi gerektirir.</p>
+      </figcaption>
+    </figure>
+    <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Bu <i>runtime</i> ve altyapı yetenekleri inşa edildikten sonra, uygun soyutlama seviyesinde sunulmaları gerekir. <i>Baseten</i> gibi çıkarım sağlayıcılarının da çıkarım altyapısı kuran iç ekiplerin de, eksiksiz bir çıkarım platformunun kritik üçüncü katmanı olarak hangi araçları ve geliştirici deneyimini sunacaklarını düşünmeleri gerekir.</p>
+    <p class="bl"> </p>
+    <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Geliştirici deneyimi özneldir. Çıkarım için bir uçta kara kutu yaklaşımı vardır: platforma model ağırlıklarını verirsiniz, karşılığında bir <i>API</i> alırsınız. Diğer uçta ise yalnızca hesaplama, ağ, disk ve benzeri için temel yapı taşlarının sağlanması yer alır.</p>
+    <p class="bl"> </p>
+    <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Doğru geliştirici deneyimi bu ikisinin ortasında bir yerdedir; çıkarım mühendislerinin kritik önemdeki çıkarımı güvenle çalıştırabilecekleri kadar kontrole, ama üretken çalışabilecekleri kadar da soyutlamaya sahip olduğu bir nokta.</p>
+    <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR"><i>Inference Engineering</i>, <i>runtime</i>, altyapı ve araçlar olmak üzere üç katmanın tamamında çıkarıma güç veren teknolojilerin ve tekniklerin bir haritasını sunar.</p>
+    <p class="bl"> </p>
+    <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Bölüm 1, Ön Koşullar, çıkarım mühendisliği devreye girmeden önce yapılması gereken ürün düşüncesi ve yapay zeka mühendisliği çalışmalarını ele alır: kullanım senaryosu tanımı, gecikme ve maliyet bütçelemesi, hangi üretken yapay zeka modellerinin optimize edilip dağıtılacağının seçilmesi ve değerlendirilmesi.</p>
+    <p class="bl"> </p>
+    <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR"><span epub:type="pagebreak" id="page_22" title="22" role="doc-pagebreak"/>Bölüm 2, Modeller, yapay zeka modellerinin teknik mimarisini -büyük dil modellerinden görüntü ve video üretim modellerine kadar- tanıtır ve <i>attention</i> optimizasyonuna özel bir odaklanmayla çıkarım için darboğazların nerede olduğunu ortaya koyar.</p>
+    <p class="bl"> </p>
+    <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Bölüm 3, Donanım, modern <i>GPU</i>'ların teknik özellik sayfasından başlayarak hesaplama ve belleği inceler, ardından NVIDIA'nın veri merkezi sınıfı ürünleri içindeki mimarileri ve SKU'ları netleştirir ve son olarak piyasadaki diğer hızlandırıcılara kısaca göz atar.</p>
+    <p class="bl"> </p>
+    <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Bölüm 4, Yazılım, <i>CUDA</i>'dan <i>PyTorch</i>, <i>Transformers</i> ve <i>Diffusers</i> gibi framework'lere ve <i>vLLM</i>, <i>SGLang</i> ve <i>TensorRT-LLM</i> gibi çıkarım motorlarına uzanan soyutlamalar inşa eder. Ayrıca NVIDIA'nın büyük ölçekli dağıtık model sunumu için en yeni sistemi olan Dynamo'yu tanıtır.</p>
+    <p class="bl"> </p>
+    <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Bölüm 5, Teknikler, son teknoloji araştırmalardan uyarlanan temel model performans optimizasyon tekniklerini ele alır ve bunları canlı ortamda uygular: nicemleme, spekülatif decoding, <i>KV cache</i> yeniden kullanımı, model paralelliği ve disaggregation.</p>
+    <p class="bl"> </p>
+    <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Bölüm 6, Modaliteler, çıkarım mühendisliğini <i>LLM</i>'lerin ötesine, sese ve görsellere genişletir. Görsel-dil modelleri, <i>embedding</i> modelleri, otomatik konuşma tanıma (<i>ASR</i>) modelleri ve konuşma sentezi modelleri gibi birçok üretken yapay zeka modeli türü <i>LLM</i> mimarilerini uyarlar; bu da çıkarım mühendislerinin onları <i>LLM</i>'lerle kullanılan aynı araç ve tekniklerle çalıştırabilmesi anlamına gelir. Görüntü ve video üretim modellerinin ise kendi mimarileri ve buna bağlı performans optimizasyon teknikleri vardır.</p>
+    <p class="bl"> </p>
+    <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Bölüm 7, Canlı Ortam, optimize edilmiş model çıkarım servisleri için altyapı işletmede ve bunlar üzerine performanslı uygulamalar inşa etmede çözülmesi gereken önemli sorunların bir özetiyle kitabı sonlandırır.</p>
+    <p class="bl"> </p>
+    <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Ek A ve Ek B, sırasıyla çıkarım mühendisliği terimlerinin bir sözlüğünü ve ileri okuma için önerilen kaynakların bir derlemesini sunar.</p>
+    <p class="bl"> </p>
+    <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR"><i>LLM</i>'ler gibi kitapların da bir bilgi kesim tarihi vardır. Bu kitap Ocak 2026'da tamamlanmıştır. Ayrıntılar değişecek olsa da, bu kitaptaki ilkeler, kavramlar ve temel teknolojiler, çıkarım mühendisliği konusunda size yıllarca hizmet edecek sağlam bir temel sunar.</p>
+  </div>
+</section>
+</body>
+</html>

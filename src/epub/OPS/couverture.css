@@ -1,0 +1,31 @@
+/*NQ 14/04/17 MAJ pour enlever position:absolute;*/
+.couverture
+{
+	max-width:100%;
+	height:100%;
+	text-align:center;
+}
+body {
+	margin: 0%;
+	padding: 0%;
+	height:100%;
+	width:100%;
+}
+svg
+{
+    height: 96%;
+    width: 98%;
+}
+.img
+{
+	max-width : 100%;
+	max-height : 100%;
+}
+.pageblanche
+{
+	page-break-before:always;
+}
+.filet_couverture .img
+{
+	border:1px solid #000000;
+}

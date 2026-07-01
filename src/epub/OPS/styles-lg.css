@@ -1,0 +1,533 @@
+section {
+	display : block;
+	margin : 0%;
+	padding : 0%;
+	font-size : 100%;
+	line-height : inherit;
+ }
+figure , figcaption {
+	display : block;
+	margin : 0%;
+	padding : 0%;
+	font-size : inherit;
+	line-height : inherit;
+ }
+.image , .imagelarge {
+	text-align : center;
+	max-width : 100%;
+	padding : 0.25em 0em 0.25em 0em;
+	width:100%;
+	margin-right:auto;
+	margin-left:auto;
+ }
+.imagelarge_intext {
+	max-width : 100%;
+ }
+body {
+	margin : 0% 5% 0% 5%;
+	padding : 0%;
+	font-style : normal;
+	font-weight : normal;
+	font-size : 90%;
+	orphans : 2;
+	widows : 2;
+	-webkit-hyphenate-after : 3;
+	-webkit-hyphenate-before : 3;
+	-webkit-hyphenate-lines : 2;
+	-moz-hyphenate-after : 3;
+	-moz-hyphenate-before : 3;
+	-moz-hyphenate-lines : 2;
+	-ms-hyphenate-after : 3;
+	-ms-hyphenate-before : 3;
+	-ms-hyphenate-lines : 2;
+	-o-hyphenate-after : 3;
+	-o-hyphenate-before : 3;
+	-o-hyphenate-lines : 2;
+	text-rendering : optimizeSpeed;
+ }
+p , div , li {
+	margin : 0%;
+	padding : 0%;
+	text-rendering : optimizeSpeed;
+ }
+.liste_puce li , .liste_num li {
+	margin : 0% 0% 0.5% 0%;
+	padding : 0%;
+	text-rendering : optimizeSpeed;
+ }
+ul , ol {
+	margin : 0% 0% 0% 5%;
+	padding : 0%;
+	text-rendering : optimizeSpeed;
+ }
+h1 , h2 , h3 , h4 {
+	font-size : 1.5em;
+	text-align : center;
+	margin : 0%;
+	padding : 0%;
+	font-style : normal;
+	font-weight : normal;
+	text-rendering : optimizeSpeed;
+ }
+i {
+	font-style : italic;
+	text-rendering : optimizeSpeed;
+ }
+b {
+	font-weight : bold;
+	text-rendering : optimizeSpeed;
+ }
+.sl {
+	/*border-bottom : 1px solid #000000;*/
+	padding : 0em 0em 0.01em 0em;
+	text-rendering : optimizeSpeed;
+ }
+a {
+	text-decoration : none;
+	text-rendering : optimizeSpeed;
+ }
+.chap , .appen , .pre , .part {
+	padding : 25% 0% 0% 0%;
+	page-break-before : always;
+	break-before : page;
+	text-rendering : optimizeSpeed;
+ }
+.dev {
+	margin : 9% 0% 0% 0%;
+	text-rendering : optimizeSpeed;
+ }
+.part_n {
+	font-size : 0.93em;
+	line-height : 120%;
+	text-align : right;
+	page-break-inside : avoid;
+	page-break-after : avoid;
+	margin : 0% 0% 3% 0%;
+	-webkit-hyphens : none;
+	-moz-hyphens : none;
+	-ms-hyphens : none;
+	-o-hyphens : none;
+	hyphens : none;
+	text-transform : uppercase;
+	text-rendering : optimizeSpeed;
+	display : block;
+	font-variant : small-caps;
+ }
+.part_tit {
+	font-size : 2em;
+	line-height : 120%;
+	text-align : right;
+	page-break-inside : avoid;
+	page-break-after : avoid;
+	margin : 0% 0% 3% 0%;
+	-webkit-hyphens : none;
+	-moz-hyphens : none;
+	-ms-hyphens : none;
+	-o-hyphens : none;
+	hyphens : none;
+	text-transform : none;
+	text-rendering : optimizeSpeed;
+	display : block;
+ }
+.pre_tit {
+	font-size : 1.8em;
+	line-height : 120%;
+	text-align : center;
+	page-break-inside : avoid;
+	page-break-after : avoid;
+	margin : 0% 0% 3% 0%;
+	-webkit-hyphens : none;
+	-moz-hyphens : none;
+	-ms-hyphens : none;
+	-o-hyphens : none;
+	hyphens : none;
+	text-rendering : optimizeSpeed;
+	display : block;
+ }
+.appen_tit {
+	font-size : 1em;
+	line-height : 120%;
+	text-align : center;
+	page-break-inside : avoid;
+	page-break-after : avoid;
+	margin : 0% 0% 3% 0%;
+	-webkit-hyphens : none;
+	-moz-hyphens : none;
+	-ms-hyphens : none;
+	-o-hyphens : none;
+	hyphens : none;
+	text-rendering : optimizeSpeed;
+	display : block;
+	text-transform:uppercase;
+ }
+.chap_tit {	
+	font-weight : bold;
+	font-size : 0.93em;
+	line-height : 110%;
+	text-align : left;
+	page-break-inside : avoid;
+	page-break-after : avoid;
+	margin : 0% 15% 4% 0%;
+	-webkit-hyphens : none;
+	-moz-hyphens : none;
+	-ms-hyphens : none;
+	-o-hyphens : none;
+	hyphens : none;
+	text-rendering : optimizeSpeed;
+ }
+.appen_stit {
+	font-size : 1.3em;
+	line-height : 120%;
+	text-align : center;
+	page-break-inside : avoid;
+	page-break-after : avoid;
+	margin : 3% 0% 0% 0%;
+	-webkit-hyphens : none;
+	-moz-hyphens : none;
+	-ms-hyphens : none;
+	-o-hyphens : none;
+	hyphens : none;
+	text-rendering : optimizeSpeed;
+	display : block;
+ }
+.hi_part .part_n {
+	/*font-size : 0.93em;*/
+	line-height : 90%;
+	/*text-align : center;*/
+	page-break-inside : avoid;
+	page-break-after : avoid;
+	/*margin : 0% 0% 0% 0%;*/
+	-webkit-hyphens : none;
+	-moz-hyphens : none;
+	-ms-hyphens : none;
+	-o-hyphens : none;
+	hyphens : none;
+	text-rendering : optimizeSpeed;
+	display : block;
+ }
+.hi_chap , .hi_part , .hi_appen , .hi_pre {
+	line-height : 100%;
+	text-align : center;
+	page-break-inside : avoid;
+	page-break-after : avoid;
+	-webkit-hyphens : none;
+	-moz-hyphens : none;
+	-ms-hyphens : none;
+	-o-hyphens : none;
+	hyphens : none;
+	text-rendering : optimizeSpeed;
+ }
+.hi_part .part_tit {
+	font-size : 1.5em;
+	line-height : 120%;
+	/*text-align : center;*/
+	page-break-inside : avoid;
+	page-break-after : avoid;
+	/*margin : 0% 0% 0% 0%;*/
+	-webkit-hyphens : none;
+	-moz-hyphens : none;
+	-ms-hyphens : none;
+	-o-hyphens : none;
+	hyphens : none;
+	/*text-transform : uppercase;*/
+	text-rendering : optimizeSpeed;
+	display : block;
+ }
+.hi_pre .pre_tit , .hi_chap .chap_tit , .hi_appen .appen_tit {
+	/*font-size : 1.3em;*/
+	line-height : 100%;
+	/*text-align : center;*/
+	page-break-inside : avoid;
+	page-break-after : avoid;
+	/*margin : 1% 0% 1% 0%;*/
+	-webkit-hyphens : none;
+	-moz-hyphens : none;
+	-ms-hyphens : none;
+	-o-hyphens : none;
+	hyphens : none;
+	text-rendering : optimizeSpeed;
+	display : block;
+	/*text-transform : none;*/
+ }
+.hi_appen .appen_stit {
+	font-size : 1.4em;
+	line-height : 90%;
+	text-align : center;
+	page-break-inside : avoid;
+	page-break-after : avoid;
+	margin : 0% 0% 0% 0%;
+	-webkit-hyphens : none;
+	-moz-hyphens : none;
+	-ms-hyphens : none;
+	-o-hyphens : none;
+	hyphens : none;
+	text-rendering : optimizeSpeed;
+	display : block;
+ }
+.niv1 {
+	margin : 12% 0% 0% 0%;
+	page-break-before : always;
+	break-before : page;
+	text-rendering : optimizeSpeed;
+ }
+.niv2 {
+	margin : 8% 0% 0% 0%;
+	text-rendering : optimizeSpeed;
+ }
+.int_niv1 {
+	font-weight : bold;
+	font-size : 1.3em;
+	line-height : 110%;
+	text-align : left;
+	page-break-inside : avoid;
+	page-break-after : avoid;
+	margin : 0% 15% 4% 0%;
+	-webkit-hyphens : none;
+	-moz-hyphens : none;
+	-ms-hyphens : none;
+	-o-hyphens : none;
+	hyphens : none;
+	text-rendering : optimizeSpeed;
+ }
+.int_niv2 {
+	font-weight : normal;
+	font-size : 1.15em;
+	line-height : 110%;
+	text-align : left;
+	page-break-inside : avoid;
+	page-break-after : avoid;
+	margin : 0% 15% 3% 0%;
+	-webkit-hyphens : none;
+	-moz-hyphens : none;
+	-ms-hyphens : none;
+	-o-hyphens : none;
+	hyphens : none;
+	font-variant : normal;
+	text-rendering : optimizeSpeed;
+ }
+.sign {
+	margin : 2% 0% 0% 0%;
+	text-align : right;
+	-webkit-hyphens : none;
+	-moz-hyphens : none;
+	-ms-hyphens : none;
+	-o-hyphens : none;
+	hyphens : none;
+	text-rendering : optimizeSpeed;
+ }
+.txt_courant_centre {
+	text-align : center;
+	text-indent : 0%;
+	line-height : 140%;
+	margin : 0% 5% 0% 5%;
+	-webkit-hyphens : none;
+	-moz-hyphens : none;
+	-ms-hyphens : none;
+	-o-hyphens : none;
+	hyphens : none;
+	text-rendering : optimizeSpeed;
+ }
+.txt_courant_ssalinea {
+	text-align : justify;
+	-webkit-hyphens : auto;
+	-moz-hyphens : auto;
+	-ms-hyphens : auto;
+	hyphens : auto;
+	text-indent : 0%;
+	line-height : 140%;
+	text-rendering : optimizeSpeed;
+ }
+.liste_puce {
+	list-style-image : none;
+	list-style-type : disc;
+	text-rendering : optimizeSpeed;
+	margin-left: 2.5em; 
+	margin-top: 1em;
+	margin-bottom: 1em;
+ }
+.liste_num {
+	list-style-image : none;
+	list-style-type : decimal;
+	text-rendering : optimizeSpeed;
+	margin-left: 4em; 
+	margin-top: 1em;
+	margin-bottom: 1em;
+ }
+.liste_txt_courant_ssalinea {
+	text-align : left;
+	-webkit-hyphens : auto;
+	-moz-hyphens : auto;
+	-ms-hyphens : auto;
+	hyphens : auto;
+	line-height : 140%;
+	text-rendering : optimizeSpeed;
+ }
+.tableau {
+	font-size : 0.85em;
+	page-break-inside : avoid;
+	text-align : center;
+	text-indent : 0%;
+	line-height : 140%;
+	-webkit-hyphens : none;
+	-moz-hyphens : none;
+	-ms-hyphens : none;
+	-o-hyphens : none;
+	hyphens : none;
+	margin : 5% 0% 5% 0%;
+	text-rendering : optimizeSpeed;
+	font-family : Arial, Helvetica, sans-serif;
+ }
+table {
+	text-align : left;
+	table-layout : fixed;
+	width : 100%;
+	max-width : 100%;
+	border-collapse : collapse;
+	text-rendering : optimizeSpeed;
+ }
+th , td {
+	font-style : normal;
+	font-weight : normal;
+	overflow-wrap : break-word;
+	word-wrap : break-word;
+	text-rendering : optimizeSpeed;
+ }
+.table-align {
+	text-align : center;
+	text-indent : 0%;
+	line-height : 140%;
+	margin : 0.7em 0em 0.7em 0em;
+	table-layout : fixed;
+	width : 100%;
+	max-width : 100%;
+	-webkit-hyphens : none;
+	-moz-hyphens : none;
+	-ms-hyphens : none;
+	-o-hyphens : none;
+	hyphens : none;
+	text-rendering : optimizeSpeed;
+ }
+tbody {
+	vertical-align : middle;
+	text-rendering : optimizeSpeed;
+ }
+thead {
+	vertical-align : middle;
+	text-rendering : optimizeSpeed;
+	display : table-header-group;
+ }
+.tableau .txt_courant_ssalinea , .fig .txt_courant_ssalinea {
+	-webkit-hyphens : auto;
+	-moz-hyphens : auto;
+	-ms-hyphens : auto;
+	-o-hyphens : auto;
+	hyphens : auto;
+	text-rendering : optimizeSpeed;
+	font-family : Arial, Helvetica, sans-serif;
+ }
+.fig {
+	margin : 5% 0% 5% 0%;
+	text-align : center;
+	font-size : 0.85em;
+	text-indent : 0%;
+	line-height : 140%;
+	page-break-inside : avoid;
+	-webkit-hyphens : none;
+	-moz-hyphens : none;
+	-ms-hyphens : none;
+	-o-hyphens : none;
+	hyphens : none;
+	text-rendering : optimizeSpeed;
+ }
+.leg {
+	margin : 0.5% 0% 1% 0%;
+	text-rendering : optimizeSpeed;
+	font-family : Arial, Helvetica, sans-serif;
+ }
+.leg .txt_courant_ssalinea , table .txt_courant_centre {
+	text-indent : 0%;
+	text-rendering : optimizeSpeed;
+	font-family : Arial, Helvetica, sans-serif;
+ }
+.SOM {
+	padding : 25% 0% 0% 0%;
+	text-align : left;
+	line-height : 120%;
+	-webkit-hyphens : none;
+	-moz-hyphens : none;
+	-ms-hyphens : none;
+	-o-hyphens : none;
+	hyphens : none;
+	text-rendering : optimizeSpeed;
+ }
+.SOM_titre {
+	font-size : 1.7em;
+	line-height : 120%;
+	text-align : center;
+	page-break-inside : avoid;
+	page-break-after : avoid;
+	margin : 0% 0% 7% 0%;
+	-webkit-hyphens : none;
+	-moz-hyphens : none;
+	-ms-hyphens : none;
+	-o-hyphens : none;
+	hyphens : none;
+	font-variant : small-caps;
+	text-rendering : optimizeSpeed;
+ }
+.SOM_pdd , .SOM_part , .SOM_appen , .SOM_pre {
+	font-size : 0.9em;
+	margin : 3% 0% 0% 0%;
+	text-rendering : optimizeSpeed;
+ }
+.SOM_niv1 {
+	font-style : normal;
+	font-size : 0.8em;
+	margin : 2% 0% 0% 4%;
+	text-rendering : optimizeSpeed;
+ }
+.SOM_niv2 {
+	font-size : 0.8em;
+	margin : 2% 0% 0% 8%;
+	text-rendering : optimizeSpeed;
+ }
+.mev1 {
+	/*background-color : #FFFF00;*/
+	text-rendering : optimizeSpeed;
+ }
+.retrait_gauche {
+	margin-left : 5%;
+	text-rendering : optimizeSpeed;
+ }
+.part_debut , .chap_debut , .div_autre {
+	text-rendering : optimizeSpeed;
+ }
+.renv {
+	text-rendering : optimizeSpeed;
+	text-decoration : underline;
+ }
+a.url {
+	-webkit-hyphens : auto;
+	-moz-hyphens : auto;
+	-ms-hyphens : auto;
+	-o-hyphens : auto;
+	hyphens : auto;
+	text-decoration : underline;
+ }
+.url {
+	text-decoration : underline;
+ }
+.sl a.url {
+	/*background-color : #FF0;*/
+ }
+#appen-02 .sl , #appen-004 .sl , #appen-005 .sl , #appen-006 .sl , #appen-007 .sl , #appen-008 .sl , #appen-009 .sl {
+	border: none;
+	}
+#appen-003 .appen_tit {
+	text-transform:none;}
+#appen-004 , #appen-005 , #appen-006 , #appen-007 , #appen-008 , #appen-009 {
+	padding-top:0%}
+#appen-004 .niv1 , #appen-005 .niv1 , #appen-006 .niv1 , #appen-007 .niv1 , #appen-008 .niv1 , #appen-009 .niv1 {
+	margin-top:0%;}
+#appen-002 .appen_tit , #appen-001 .appen_tit , #appen-002 .appen_stit , #appen-001 .appen_stit {
+	text-align:right;}

@@ -1,0 +1,91 @@
+section {
+	display : block;
+	margin : 0%;
+	padding : 0%;
+	font-size : 100%;
+	line-height : inherit;
+ }
+body {
+	margin : 0% 5% 0% 5%;
+	padding : 0%;
+	font-style : normal;
+	font-weight : normal;
+	font-size : 90%;
+	orphans : 2;
+	widows : 2;
+	-webkit-hyphenate-after : 3;
+	-webkit-hyphenate-before : 3;
+	-webkit-hyphenate-lines : 2;
+	-moz-hyphenate-after : 3;
+	-moz-hyphenate-before : 3;
+	-moz-hyphenate-lines : 2;
+	-ms-hyphenate-after : 3;
+	-ms-hyphenate-before : 3;
+	-ms-hyphenate-lines : 2;
+	-o-hyphenate-after : 3;
+	-o-hyphenate-before : 3;
+	-o-hyphenate-lines : 2;
+	text-rendering : optimizeSpeed;
+ }
+p {
+	margin : 0%;
+	padding : 0%;
+	text-rendering : optimizeSpeed;
+ }
+i {
+	font-style : italic;
+	text-rendering : optimizeSpeed;
+ }
+b {
+	font-weight : bold;
+	text-rendering : optimizeSpeed;
+ }
+a {
+	text-decoration : none;
+	text-rendering : optimizeSpeed;
+ }
+.ident {
+	text-align : center;
+	-webkit-hyphens : none;
+	-moz-hyphens : none;
+	-ms-hyphens : none;
+	-o-hyphens : none;
+	hyphens : none;
+	text-rendering : optimizeSpeed;
+ }
+.info , .copy , .isbn {
+	text-align : center;
+	font-size : 0.85em;
+	line-height : 140%;
+	margin : 3% 0% 0% 0%;
+	text-rendering : optimizeSpeed;
+ }
+.pagecopyright {
+	padding : 25% 0% 0% 0%;
+	text-rendering : optimizeSpeed;
+ }
+.info + .copy {
+	margin:0%;}
+
+.ident_tit {
+	font-weight: normal;
+	text-align : right;
+	font-size : 2.4em;
+	line-height : 120%;
+	margin : 10% 0% 5% 12%;
+	text-rendering : optimizeSpeed;
+	text-transform:uppercase;
+	font-family:sans-serif;
+	overflow-wrap : break-word;
+	word-wrap : break-word;
+ }
+
+.auteur_ident {
+	text-align : right;
+	font-size : 1em;
+	line-height : 120%;
+	margin : 25% 0% 2% 0%;
+	text-rendering : optimizeSpeed;
+	font-family:sans-serif;
+	text-transform:uppercase;
+ }

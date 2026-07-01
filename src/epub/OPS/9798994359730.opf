@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="ean" prefix="tdm: http://www.w3.org/ns/tdmrep#" xml:lang="tr">
+<metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:opf="http://www.idpf.org/2007/opf">
+<dc:language>tr</dc:language>
+<dc:creator id="creator01">Philip Kiely</dc:creator>
+<meta refines="#creator01" property="role" scheme="marc:relators">aut</meta>
+<meta refines="#creator01" property="display-seq">1</meta>
+<dc:contributor id="translator01">Muhammed Kılıç</dc:contributor>
+<meta refines="#translator01" property="role" scheme="marc:relators">trl</meta>
+<dc:publisher>Baseten Books</dc:publisher>
+<dc:title id="t1">Çıkarım Mühendisliği (Inference Engineering)</dc:title>
+<meta refines="#t1" property="title-type">main</meta>
+<meta refines="#t1" property="display-seq">1</meta>
+<dc:identifier id="ean">9798994359730</dc:identifier>
+<dc:date>2026-01-22T11:28:34Z</dc:date>
+<dc:rights>Copyright © 2026 Baseten Labs, Inc. Bu, gayriresmi bir Türkçe çeviridir; orijinal eserin tüm hakları yayıncıya aittir.</dc:rights>
+<meta name="cover" content="cover-image"/>
+<meta property="dcterms:modified">2026-01-22T12:28:46Z</meta>
+<meta property="schema:accessibilitySummary">This publication conforms to the EPUB Accessibility specification at WCAG Level AA.</meta>
+<meta property="schema:accessibilityHazard">noFlashingHazard</meta>
+<meta property="schema:accessibilityHazard">noMotionSimulationHazard</meta>
+<meta property="schema:accessibilityHazard">noSoundHazard</meta>
+<meta property="schema:accessibilityFeature">readingOrder</meta>
+<meta property="schema:accessibilityFeature">structuralNavigation</meta>
+<meta property="schema:accessibilityFeature">printPageNumbers</meta>
+<dc:source>urn:isbn:9798994359723</dc:source>
+<meta property="pageBreakSource">urn:isbn:9798994359723</meta>
+<meta property="schema:accessibilityFeature">tableOfContents</meta>
+<meta property="schema:accessibilityFeature">displayTransformability</meta>
+<meta property="tdm:reservation">1</meta>
+<meta property="schema:accessMode">textual</meta>
+<meta property="schema:accessMode">visual</meta>
+<meta property="schema:accessModeSufficient">textual</meta>
+<meta property="schema:accessibilityFeature">alternativeText</meta>
+</metadata>
+<manifest><item id="ident_css" href="ident.css" media-type="text/css"/>
+<item id="styles_lg_css" href="styles-lg.css" media-type="text/css"/>
+<item id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml"/>
+<item id="nav" href="nav.xhtml" media-type="application/xhtml+xml" properties="nav"/>
+<item id="IMGLG0" href="images/fig_1.jpg" media-type="image/jpeg"/>
+<item id="IMGLG1" href="images/fig_2.jpg" media-type="image/jpeg"/>
+<item id="IMGLG2" href="images/fig_3.jpg" media-type="image/jpeg"/>
+<item id="IMGLG3" href="images/fig_4.jpg" media-type="image/jpeg"/>
+<item id="IMGLG4" href="images/fig_5.jpg" media-type="image/jpeg"/>
+<item id="IMGLG5" href="images/fig_6.jpg" media-type="image/jpeg"/>
+<item id="IMGLG6" href="images/fig_7.jpg" media-type="image/jpeg"/>
+<item id="IMGLG7" href="images/fig_8.jpg" media-type="image/jpeg"/>
+<item id="IMGLG8" href="images/fig_9.jpg" media-type="image/jpeg"/>
+<item id="IMGLG9" href="images/fig_10.jpg" media-type="image/jpeg"/>
+<item id="IMGLG10" href="images/fig_11.jpg" media-type="image/jpeg"/>
+<item id="IMGLG11" href="images/fig_12.jpg" media-type="image/jpeg"/>
+<item id="IMGLG12" href="images/fig_13.jpg" media-type="image/jpeg"/>
+<item id="IMGLG13" href="images/fig_14.jpg" media-type="image/jpeg"/>
+<item id="IMGLG14" href="images/fig_15.jpg" media-type="image/jpeg"/>
+<item id="IMGLG15" href="images/fig_16.jpg" media-type="image/jpeg"/>
+<item id="IMGLG16" href="images/fig_17.jpg" media-type="image/jpeg"/>
+<item id="IMGLG17" href="images/fig_18.jpg" media-type="image/jpeg"/>
+<item id="IMGLG18" href="images/fig_19.jpg" media-type="image/jpeg"/>
+<item id="IMGLG19" href="images/fig_20.jpg" media-type="image/jpeg"/>
+<item id="IMGLG20" href="images/fig_21.jpg" media-type="image/jpeg"/>
+<item id="IMGLG21" href="images/fig_22.jpg" media-type="image/jpeg"/>
+<item id="IMGLG22" href="images/fig_23.jpg" media-type="image/jpeg"/>
+<item id="IMGLG23" href="images/fig_24.jpg" media-type="image/jpeg"/>
+<item id="IMGLG24" href="images/fig_25.jpg" media-type="image/jpeg"/>
+<item id="IMGLG25" href="images/fig_26.jpg" media-type="image/jpeg"/>
+<item id="IMGLG26" href="images/fig_27.jpg" media-type="image/jpeg"/>
+<item id="IMGLG27" href="images/fig_28.jpg" media-type="image/jpeg"/>
+<item id="IMGLG28" href="images/fig_29.jpg" media-type="image/jpeg"/>
+<item id="IMGLG29" href="images/fig_30.jpg" media-type="image/jpeg"/>
+<item id="IMGLG30" href="images/fig_31.jpg" media-type="image/jpeg"/>
+<item id="IMGLG31" href="images/fig_32.jpg" media-type="image/jpeg"/>
+<item id="IMGLG32" href="images/fig_33.jpg" media-type="image/jpeg"/>
+<item id="IMGLG33" href="images/fig_34.jpg" media-type="image/jpeg"/>
+<item id="IMGLG34" href="images/fig_35.jpg" media-type="image/jpeg"/>
+<item id="IMGLG35" href="images/fig_36.jpg" media-type="image/jpeg"/>
+<item id="IMGLG36" href="images/fig_37.jpg" media-type="image/jpeg"/>
+<item id="IMGLG37" href="images/fig_38.jpg" media-type="image/jpeg"/>
+<item id="IMGLG38" href="images/fig_39.jpg" media-type="image/jpeg"/>
+<item id="IMGLG39" href="images/fig_40.jpg" media-type="image/jpeg"/>
+<item id="IMGLG40" href="images/fig_41.jpg" media-type="image/jpeg"/>
+<item id="IMGLG41" href="images/fig_42.jpg" media-type="image/jpeg"/>
+<item id="IMGLG42" href="images/fig_43.jpg" media-type="image/jpeg"/>
+<item id="IMGLG43" href="images/fig_44.jpg" media-type="image/jpeg"/>
+<item id="IMGLG44" href="images/fig_45.jpg" media-type="image/jpeg"/>
+<item id="IMGLG45" href="images/fig_46.jpg" media-type="image/jpeg"/>
+<item id="IMGLG46" href="images/fig_47.jpg" media-type="image/jpeg"/>
+<item id="IMGLG47" href="images/fig_48.jpg" media-type="image/jpeg"/>
+<item id="IMGLG48" href="images/fig_49.jpg" media-type="image/jpeg"/>
+<item id="IMGLG49" href="images/fig_50.jpg" media-type="image/jpeg"/>
+<item id="IMGLG50" href="images/fig_51.jpg" media-type="image/jpeg"/>
+<item id="IMGLG51" href="images/fig_52.jpg" media-type="image/jpeg"/>
+<item id="IMGLG52" href="images/fig_53.jpg" media-type="image/jpeg"/>
+<item id="IMGLG53" href="images/fig_54.jpg" media-type="image/jpeg"/>
+<item id="IMGLG54" href="images/fig_55.jpg" media-type="image/jpeg"/>
+<item id="IMGLG55" href="images/fig_56.jpg" media-type="image/jpeg"/>
+<item id="IMGLG56" href="images/fig_57.jpg" media-type="image/jpeg"/>
+<item id="IMGLG57" href="images/fig_58.jpg" media-type="image/jpeg"/>
+<item id="IMGLG58" href="images/fig_59.jpg" media-type="image/jpeg"/>
+<item id="IMGLG59" href="images/fig_60.jpg" media-type="image/jpeg"/>
+<item id="IMGLG60" href="images/fig_61.jpg" media-type="image/jpeg"/>
+<item id="IMGLG61" href="images/fig_62.jpg" media-type="image/jpeg"/>
+<item id="IMGLG62" href="images/fig_63.jpg" media-type="image/jpeg"/>
+<item id="IMGLG63" href="images/fig_64.jpg" media-type="image/jpeg"/>
+<item id="IMGLG64" href="images/fig_65.jpg" media-type="image/jpeg"/>
+<item id="IMGLG65" href="images/fig_66.jpg" media-type="image/jpeg"/>
+<item id="IMGLG66" href="images/fig_67.jpg" media-type="image/jpeg"/>
+<item id="IMGLG67" href="images/fig_68.jpg" media-type="image/jpeg"/>
+<item id="IMGLG68" href="images/fig_69.jpg" media-type="image/jpeg"/>
+<item id="IMGLG69" href="images/fig_70.jpg" media-type="image/jpeg"/>
+<item id="IMGLG70" href="images/fig_71.jpg" media-type="image/jpeg"/>
+<item id="IMGLG71" href="images/fig_72.jpg" media-type="image/jpeg"/>
+<item id="IMGLG72" href="images/fig_73.jpg" media-type="image/jpeg"/>
+<item id="IMGLG73" href="images/fig_74.jpg" media-type="image/jpeg"/>
+<item id="IMGLG74" href="images/fig_75.jpg" media-type="image/jpeg"/>
+<item id="IMGLG75" href="images/fig_76.jpg" media-type="image/jpeg"/>
+<item id="IMGLG76" href="images/fig_77.jpg" media-type="image/jpeg"/>
+<item id="IMGLG77" href="images/fig_78.jpg" media-type="image/jpeg"/>
+<item id="IMGLG78" href="images/fig_79.jpg" media-type="image/jpeg"/>
+<item id="IMGLG79" href="images/fig_80.jpg" media-type="image/jpeg"/>
+<item id="IMGLG80" href="images/fig_81.jpg" media-type="image/jpeg"/>
+<item id="IMGLG81" href="images/fig_82.jpg" media-type="image/jpeg"/>
+<item id="IMGLG82" href="images/fig_83.jpg" media-type="image/jpeg"/>
+<item id="IMGLG83" href="images/fig_84.jpg" media-type="image/jpeg"/>
+<item id="IMGLG84" href="images/fig_85.jpg" media-type="image/jpeg"/>
+<item id="IMGLG85" href="images/fig_86.jpg" media-type="image/jpeg"/>
+<item id="IMGLG86" href="images/fig_87.jpg" media-type="image/jpeg"/>
+<item id="IMGLG87" href="images/fig_88.jpg" media-type="image/jpeg"/>
+<item id="IMGLG88" href="images/fig_89.jpg" media-type="image/jpeg"/>
+<item id="ident1" href="ident1.xhtml" media-type="application/xhtml+xml"/>
+<item id="pre1" href="pre1.xhtml" media-type="application/xhtml+xml"/>
+<item id="p1" href="p1.xhtml" media-type="application/xhtml+xml"/>
+<item id="p1chap1" href="p1chap1.xhtml" media-type="application/xhtml+xml"/>
+<item id="p2" href="p2.xhtml" media-type="application/xhtml+xml"/>
+<item id="p2chap1" href="p2chap1.xhtml" media-type="application/xhtml+xml"/>
+<item id="p3" href="p3.xhtml" media-type="application/xhtml+xml"/>
+<item id="p3chap1" href="p3chap1.xhtml" media-type="application/xhtml+xml"/>
+<item id="p4" href="p4.xhtml" media-type="application/xhtml+xml"/>
+<item id="p4chap1" href="p4chap1.xhtml" media-type="application/xhtml+xml"/>
+<item id="p5" href="p5.xhtml" media-type="application/xhtml+xml"/>
+<item id="p5chap1" href="p5chap1.xhtml" media-type="application/xhtml+xml"/>
+<item id="p6" href="p6.xhtml" media-type="application/xhtml+xml"/>
+<item id="p6chap1" href="p6chap1.xhtml" media-type="application/xhtml+xml"/>
+<item id="p7" href="p7.xhtml" media-type="application/xhtml+xml"/>
+<item id="p7chap1" href="p7chap1.xhtml" media-type="application/xhtml+xml"/>
+<item id="p8" href="p8.xhtml" media-type="application/xhtml+xml"/>
+<item id="p8chap1" href="p8chap1.xhtml" media-type="application/xhtml+xml"/>
+<item id="appen1" href="appen1.xhtml" media-type="application/xhtml+xml"/>
+<item id="appen2" href="appen2.xhtml" media-type="application/xhtml+xml"/>
+<item id="appen3" href="appen3.xhtml" media-type="application/xhtml+xml"/>
+<item id="appen4" href="appen4.xhtml" media-type="application/xhtml+xml"/>
+<item id="appen5" href="appen5.xhtml" media-type="application/xhtml+xml"/>
+<item id="appen6" href="appen6.xhtml" media-type="application/xhtml+xml"/>
+<item id="appen7" href="appen7.xhtml" media-type="application/xhtml+xml"/>
+<item id="appen8" href="appen8.xhtml" media-type="application/xhtml+xml"/>
+<item id="appen9" href="appen9.xhtml" media-type="application/xhtml+xml"/>
+<item id="appen10" href="appen10.xhtml" media-type="application/xhtml+xml"/>
+<item id="appen11" href="appen11.xhtml" media-type="application/xhtml+xml"/>
+<item id="sommaire" href="sommaire.xhtml" media-type="application/xhtml+xml"/>
+<item id="cover-image" href="cover/cover.jpg" media-type="image/jpeg" properties="cover-image"/>
+<item id="html-cover-page" href="cover.xhtml" media-type="application/xhtml+xml"/>
+<item id="couverture_css" href="couverture.css" media-type="text/css"/>
+<item id="html-pagetitre" href="pagetitre.xhtml" media-type="application/xhtml+xml"/>
+</manifest>
+<spine toc="ncx"><itemref idref="html-cover-page"/>
+<itemref idref="html-pagetitre"/>
+<itemref idref="ident1"/>
+<itemref idref="sommaire"/>
+<itemref idref="pre1"/>
+<itemref idref="p1"/>
+<itemref idref="p1chap1"/>
+<itemref idref="p2"/>
+<itemref idref="p2chap1"/>
+<itemref idref="p3"/>
+<itemref idref="p3chap1"/>
+<itemref idref="p4"/>
+<itemref idref="p4chap1"/>
+<itemref idref="p5"/>
+<itemref idref="p5chap1"/>
+<itemref idref="p6"/>
+<itemref idref="p6chap1"/>
+<itemref idref="p7"/>
+<itemref idref="p7chap1"/>
+<itemref idref="p8"/>
+<itemref idref="p8chap1"/>
+<itemref idref="appen1"/>
+<itemref idref="appen2"/>
+<itemref idref="appen3"/>
+<itemref idref="appen4"/>
+<itemref idref="appen5"/>
+<itemref idref="appen6"/>
+<itemref idref="appen7"/>
+<itemref idref="appen8"/>
+<itemref idref="appen9"/>
+<itemref idref="appen10"/>
+<itemref idref="appen11"/>
+</spine>
+<guide><reference href="cover.xhtml" type="cover" title="Cover"/>
+<reference href="pre1.xhtml" type="text" title="Start of content"/>
+<reference href="sommaire.xhtml" type="toc" title="Contents"/>
+</guide>
+</package>

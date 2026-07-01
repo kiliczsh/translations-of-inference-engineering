@@ -1,0 +1,1173 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml" xmlns:schema="http://schema.org/" xmlns:php="http://php.net/xsl" lang="tr-TR" xml:lang="tr-TR">
+  <head>
+    <meta charset="utf-8"/>
+    <title>Teknikler - Bölüm 5 - Teknikler</title>
+    <link rel="stylesheet" href="styles-lg.css" type="text/css"/>
+  </head>
+  <body epub:type="bodymatter" lang="tr-TR" xml:lang="tr-TR">
+    <section class="chap" epub:type="chapter" id="chap-014" lang="tr-TR" role="doc-chapter">
+      <span epub:type="pagebreak" id="page_119" title="119" role="doc-pagebreak"/>
+      <div class="chap_debut">
+        <!--debut	-->
+      </div>
+      <h2 class="hi_chap">
+        <span epub:type="title" class="chap_tit" lang="tr-TR">
+          <span>Teknikler</span>
+        </span>
+      </h2>
+      <div class="dev">
+        <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Çıkarım mühendisliğinde çalışmanın en keyifli yanlarından biri, yeni akademik araştırmaların endüstri tarafından benimsenmesinin yıllar hatta on yıllar sürdüğü birçok sektörün aksine, yeni makalelerdeki tekniklerin aylar hatta haftalar içinde canlı ortamda canlıya alınmasıdır.</p>
+        <p class="bl"> </p>
+        <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Araştırma ile canlı ortam arasında kapatılması gereken bir boşluk vardır ve sektördeki en görünür çıkarım mühendisliği çalışmalarının bir kısmı tam da bu boşluğu kapatmaktan doğar.</p>
+        <p class="bl"> </p>
+        <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Çıkarım mühendisliğinin temel ilkelerinden biri, çıkarım sisteminize ne kadar çok kısıt getirebilirseniz o kadar iyi performans elde edeceğinizdir. Bu ilke, ayrı ayrı motorları <i>prefill</i> ve <i>decode</i> işlemleriyle sınırlamanıza olanak tanıyan disaggregation gibi teknikler üzerinden bu bölüm boyunca geçerliliğini korur.</p>
+        <p class="bl"> </p>
+        <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Bu model performans teknikleriyle birlikte akılda tutulması gereken yeni bir ilke daha vardır: ne kadar çok trafiğiniz varsa, (birim ekonomisini makul düzeyde tutarken) o kadar çok performans optimizasyonu yapabilirsiniz. Daha fazla <i>GPU</i> üzerinde daha yüksek model paralelliği, <i>KV cache</i> farkındalıklı yönlendirme ve dinamik disaggregation, ancak aynı modeli dikey ölçek ve yatay replikasyonla sunan çok sayıda <i>GPU</i>'nuz -genellikle birden fazla node'unuz- olduğunda anlam kazanır.</p>
+        <p class="bl"> </p>
+        <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Gerçek dünya trafiği kısıtları hiçe sayar. Ama yeterli hacimle, sistemlerinizi zaman içinde kullanımın değişen doğasına uyacak şekilde adapte edebilirsiniz. Çıkarım motorlarının, spekülasyon algoritmalarının ve model sunucularının parametrelerini ayarlamak tek seferlik bir iş değildir. Bunun yerine, ister yinelemeli dağıtımlar ister dinamik <i>runtime</i> ayarlamaları yoluyla, çıkarım sisteminizin performansını sürekli olarak iyileştirebilirsiniz.</p>
+        <p class="bl"> </p>
+        <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Doğru teknik ve yapılandırma kombinasyonunu bulmak sabırlı bir deneme gerektirir. <i>Baseten</i>'in çıkarım mühendislerinden birinin kod için bir otomatik tamamlama modeli üzerinde çalıştığı ve bir müşterinin modeli için <i>TPS</i>'i ikiye katlayan, apaçık olmayan bir çözümü bulmadan önce el yazısı bir script ile 77 farklı yapılandırma denediği bir iç hackathon'u hatırlıyorum.</p>
+        <p class="bl"> </p>
+        <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">
+          <span epub:type="pagebreak" id="page_120" title="120" role="doc-pagebreak"/>Çıkarım optimizasyonunu daha da karmaşık hale getiren şey, tekniklerin bazen birbirini tamamlaması, bazen de birbiriyle uyuşmamasıdır. Örneğin, <i>KV cache</i>'i nicemlemek disaggregation'daki bir darboğazı hafifletir, ancak <i>batch</i> boyutunu artırmak spekülasyon için kullanılabilir compute'u azaltır. Bir çıkarım mühendisinin amacı her zaman, parçalarının toplamından daha fazlasını sunan dengeli bir optimizasyon kümesi oluşturmaktır.</p>
+        <p class="bl"> </p>
+        <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Bu bölüm, çıkarım hızlandırma için uygulamalı araştırmanın beş temel kategorisini tanıtır: nicemleme (quantization), spekülasyon (speculation), önbellekleme (caching), paralellik (parallelism) ve disaggregation. Her bölümde, ilgili tekniği kullanmak için önerilen koşullara ve her birinin getirdiği olası darboğazlara veya ödünleşimlere özellikle dikkat edin.</p>
+        <div class="niv1" id="niv1-027">
+          <h3 epub:type="title" class="int_niv1" lang="tr-TR">5.1   Nicemleme (Quantization)</h3>
+          <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Nicemleme, gecikmeyi (hem <i>TTFT</i> hem de <i>TPS</i> açısından) iyileştirir, sistem verimini artırır ve disaggregation, speculation ve prefix önbellekleme gibi diğer optimizasyonların daha da etkili olması için alan açar. Ancak yanlış gittiğinde, nicemleme modelin çıktı kalitesini ciddi ölçüde düşürebilir.</p>
+          <p class="bl"> </p>
+          <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Modeller, ağırlıkların, aktivasyonların ve diğer bileşenlerin belirli bir doğal sayı formatında temsil edildiği şekilde eğitilir. Genellikle bu BF16 veya FP16'dır, ancak eğitimde 8-bit ve 4-bit doğal hassasiyetler de giderek yaygınlaşmaktadır.</p>
+          <p class="bl"> </p>
+          <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Eğitim sonrası nicemleme (post-training quantization), bu model ağırlıklarını ve diğer değerleri doğal sayı formatlarından daha düşük hassasiyetli bir formata dönüştürerek çalışır. Hassasiyeti yarıya indirmek, çıkarımın her iki aşamasında da performansı iyileştirir:</p>
+          <ul class="liste_puce">
+            <li>
+              <p class="liste_txt_courant_ssalinea" lang="tr-TR">
+                <b><i>Prefill</i>: </b>Compute-bound <i>prefill</i> artık iki katı <i>FLOPs</i> sunan daha düşük hassasiyetli Tensor Core'lar üzerinde çalışır.</p>
+            </li>
+            <li>
+              <p class="liste_txt_courant_ssalinea" lang="tr-TR">
+                <b><i>Decode</i>: </b>Memory-bound <i>decode</i> artık değer başına yarı yarıya daha az veri yükler ve böylece bellek bant genişliğini etkin biçimde iki katına çıkarır.</p>
+            </li>
+          </ul>
+          <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Nicemlenmiş veriyle çalışmak ek yük (overhead) getirir, bu yüzden 16 bitten 8 bite geçmek doğrusal olarak iki kat hızlı değildir. Pratikte, bir hassasiyet seviyesi aşağı inmek (ör. 16 bitten 8 bite) genellikle <i>LLM</i>'ler için yüzde 30 ila 50 daha iyi performans sunar.</p>
+          <p class="bl"> </p>
+          <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">
+            <span epub:type="pagebreak" id="page_121" title="121" role="doc-pagebreak"/>Nicemlemenin püf noktası, modelin çıktı kalitesini düşürme riski taşımasıdır. Nicemleme, çıkarımı çalıştıran hesaplamalar boyunca hassasiyet hatalarını ortaya çıkarma potansiyeline sahiptir.</p>
+          <p class="bl"> </p>
+          <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Hassasiyet hataları zamanla birikir. Pi sayısının farklı hassasiyetlerinin karesini ve küpünü aldığınızda ne olduğunu düşünün:</p>
+          <div class="tableau" id="tableau-014">
+            <div class="table-align">
+              <table style="border-collapse:collapse; border:outset 0pt; width:100%" border="1">
+                <colgroup style="padding:7px;">
+                  <col style="padding:7px;"/>
+                  <col style="width:33.333333333333%;"/>
+                  <col style="width:33.333333333333%;"/>
+                </colgroup>
+                <tbody>
+                  <tr style="padding:7px;">
+                    <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                      <p class="txt_courant_ssalinea" lang="tr-TR">
+                        <b>Pi hassasiyeti</b>
+                      </p>
+                    </td>
+                    <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                      <p class="txt_courant_ssalinea" lang="tr-TR">
+                        <b>Pi'nin karesi</b>
+                      </p>
+                    </td>
+                    <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                      <p class="txt_courant_ssalinea" lang="tr-TR">
+                        <b>Pi'nin küpü</b>
+                      </p>
+                    </td>
+                  </tr>
+                  <tr style="padding:7px;">
+                    <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                      <p class="txt_courant_ssalinea" lang="tr-TR">3.14159</p>
+                    </td>
+                    <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                      <p class="txt_courant_ssalinea" lang="tr-TR">9.869588</p>
+                    </td>
+                    <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                      <p class="txt_courant_ssalinea" lang="tr-TR">31.006198</p>
+                    </td>
+                  </tr>
+                  <tr style="padding:7px;">
+                    <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                      <p class="txt_courant_ssalinea" lang="tr-TR">3.14</p>
+                    </td>
+                    <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                      <p class="txt_courant_ssalinea" lang="tr-TR">9.8596</p>
+                    </td>
+                    <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                      <p class="txt_courant_ssalinea" lang="tr-TR">30.959144</p>
+                    </td>
+                  </tr>
+                  <tr style="padding:7px;">
+                    <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                      <p class="txt_courant_ssalinea" lang="tr-TR">3</p>
+                    </td>
+                    <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                      <p class="txt_courant_ssalinea" lang="tr-TR">9</p>
+                    </td>
+                    <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                      <p class="txt_courant_ssalinea" lang="tr-TR">27</p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Nicemleme çalışmasının çoğu, hem hassasiyet hatalarını önlemeye hem de bunların nihai model çıktısı üzerindeki etkisini en aza indirmeye yöneliktir.</p>
+          <div class="niv2" id="niv2-045">
+            <h4 epub:type="title" class="int_niv2" lang="tr-TR">5.1.1   Sayı Formatları</h4>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Nicemleme, yeni bir temel terim ve kısaltma kümesi getirir. Bilinmesi gereken en önemlileri yaygın sayı formatlarıdır:</p>
+            <div class="tableau" id="tableau-015">
+              <div class="table-align">
+                <table style="border-collapse:collapse; border:outset 0pt; width:100%" border="1">
+                  <colgroup style="padding:7px;">
+                    <col style="padding:7px;"/>
+                    <col style="width:16.781678167817%;"/>
+                    <col style="width:45.804580458046%;"/>
+                  </colgroup>
+                  <tbody>
+                    <tr style="padding:7px;">
+                      <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                        <p class="txt_courant_ssalinea" lang="tr-TR">
+                          <b>Ad</b>
+                        </p>
+                      </td>
+                      <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                        <p class="txt_courant_ssalinea" lang="tr-TR">
+                          <b>Kısaltma</b>
+                        </p>
+                      </td>
+                      <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                        <p class="txt_courant_ssalinea" lang="tr-TR">
+                          <b>İlk mimari</b>
+                        </p>
+                      </td>
+                    </tr>
+                    <tr style="padding:7px;">
+                      <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                        <p class="txt_courant_ssalinea" lang="tr-TR">64-bit Kayan Nokta</p>
+                      </td>
+                      <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                        <p class="txt_courant_ssalinea" lang="tr-TR">FP64</p>
+                      </td>
+                      <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                        <p class="txt_courant_ssalinea" lang="tr-TR">Fermi (2010)</p>
+                      </td>
+                    </tr>
+                    <tr style="padding:7px;">
+                      <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                        <p class="txt_courant_ssalinea" lang="tr-TR">32-bit Kayan Nokta</p>
+                      </td>
+                      <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                        <p class="txt_courant_ssalinea" lang="tr-TR">FP32</p>
+                      </td>
+                      <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                        <p class="txt_courant_ssalinea" lang="tr-TR">Kepler (2012)</p>
+                      </td>
+                    </tr>
+                    <tr style="padding:7px;">
+                      <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                        <p class="txt_courant_ssalinea" lang="tr-TR">16-bit Kayan Nokta</p>
+                      </td>
+                      <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                        <p class="txt_courant_ssalinea" lang="tr-TR">FP16</p>
+                      </td>
+                      <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                        <p class="txt_courant_ssalinea" lang="tr-TR">Pascal (2016)</p>
+                      </td>
+                    </tr>
+                    <tr style="padding:7px;">
+                      <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                        <p class="txt_courant_ssalinea" lang="tr-TR">Brain Floating Point 16</p>
+                      </td>
+                      <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                        <p class="txt_courant_ssalinea" lang="tr-TR">BF16</p>
+                      </td>
+                      <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                        <p class="txt_courant_ssalinea" lang="tr-TR"><i>Ampere</i> (2020)</p>
+                      </td>
+                    </tr>
+                    <tr style="padding:7px;">
+                      <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                        <p class="txt_courant_ssalinea" lang="tr-TR">8-bit Kayan Nokta</p>
+                      </td>
+                      <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                        <p class="txt_courant_ssalinea" lang="tr-TR">FP8</p>
+                      </td>
+                      <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                        <p class="txt_courant_ssalinea" lang="tr-TR"><i>Hopper</i> (2022)</p>
+                      </td>
+                    </tr>
+                    <tr style="padding:7px;">
+                      <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                        <p class="txt_courant_ssalinea" lang="tr-TR">Karma Hassasiyetli FP8</p>
+                      </td>
+                      <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                        <p class="txt_courant_ssalinea" lang="tr-TR">MXFP8</p>
+                      </td>
+                      <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                        <p class="txt_courant_ssalinea" lang="tr-TR"><i>Blackwell</i> (2024)</p>
+                      </td>
+                    </tr>
+                    <tr style="padding:7px;">
+                      <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                        <p class="txt_courant_ssalinea" lang="tr-TR">8-bit Tamsayı</p>
+                      </td>
+                      <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                        <p class="txt_courant_ssalinea" lang="tr-TR">INT8</p>
+                      </td>
+                      <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                        <p class="txt_courant_ssalinea" lang="tr-TR">Pascal (2016)</p>
+                      </td>
+                    </tr>
+                    <tr style="padding:7px;">
+                      <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                        <p class="txt_courant_ssalinea" lang="tr-TR">6-bit Kayan Nokta</p>
+                      </td>
+                      <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                        <p class="txt_courant_ssalinea" lang="tr-TR">FP6</p>
+                      </td>
+                      <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                        <p class="txt_courant_ssalinea" lang="tr-TR"><i>Blackwell</i> (2024, deneysel)</p>
+                      </td>
+                    </tr>
+                    <tr style="padding:7px;">
+                      <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                        <p class="txt_courant_ssalinea" lang="tr-TR">4-bit Kayan Nokta</p>
+                      </td>
+                      <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                        <p class="txt_courant_ssalinea" lang="tr-TR">FP4</p>
+                      </td>
+                      <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                        <p class="txt_courant_ssalinea" lang="tr-TR"><i>Blackwell</i> (2024)</p>
+                      </td>
+                    </tr>
+                    <tr style="padding:7px;">
+                      <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                        <p class="txt_courant_ssalinea" lang="tr-TR">Karma Hassasiyetli FP4</p>
+                      </td>
+                      <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                        <p class="txt_courant_ssalinea" lang="tr-TR">MXFP4</p>
+                      </td>
+                      <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                        <p class="txt_courant_ssalinea" lang="tr-TR"><i>Blackwell</i> (2024)</p>
+                      </td>
+                    </tr>
+                    <tr style="padding:7px;">
+                      <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                        <p class="txt_courant_ssalinea" lang="tr-TR">NVIDIA FP4</p>
+                      </td>
+                      <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                        <p class="txt_courant_ssalinea" lang="tr-TR">NVFP4</p>
+                      </td>
+                      <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                        <p class="txt_courant_ssalinea" lang="tr-TR"><i>Blackwell</i> (2024, tescilli)</p>
+                      </td>
+                    </tr>
+                    <tr style="padding:7px;">
+                      <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                        <p class="txt_courant_ssalinea" lang="tr-TR">4-bit Tamsayı</p>
+                      </td>
+                      <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                        <p class="txt_courant_ssalinea" lang="tr-TR">INT4</p>
+                      </td>
+                      <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                        <p class="txt_courant_ssalinea" lang="tr-TR">Turing (2018)</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">
+              <span epub:type="pagebreak" id="page_122" title="122" role="doc-pagebreak"/>En büyük sayı formatı olan FP64 ya da "çift hassasiyet", yalnızca yüksek hassasiyetli bilimsel hesaplama için kullanılır, AI eğitimi ya da çıkarım için değil. FP32 bazen eğitim için kullanılır, ama çıkarım için neredeyse hiç kullanılmaz. FP6, bu kitabın yayınlandığı tarihte daha deneysel bir formattır, ancak AMD <i>GPU</i>'ları bu formatı hızla benimsemektedir.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Bu da çıkarım için 16, 8 ve 4-bit hassasiyetleri başlıca formatlar olarak bırakır. Sayı formatlarının şu özellikleri vardır:</p>
+            <ul class="liste_puce">
+              <li>
+                <p class="liste_txt_courant_ssalinea" lang="tr-TR">
+                  <b>Hassasiyet:</b> Formatta tek bir değeri ifade etmek için kullanılan bit sayısı. Örneğin, FP16 16 bit kullanır.</p>
+              </li>
+              <li>
+                <p class="liste_txt_courant_ssalinea" lang="tr-TR">
+                  <b>Tür:</b> Bu bitlerin bir tamsayıyı (ondalıksız) mı yoksa kayan noktalı bir sayıyı (ondalıklı) mı temsil ettiğinin yorumlanma biçimi.</p>
+              </li>
+              <li>
+                <p class="liste_txt_courant_ssalinea" lang="tr-TR">
+                  <b>Ölçek faktörü:</b> Değerleri düşük hassasiyetli bir formattan geri yüksek hassasiyetli formata eşlemek için kullanılan bir çarpan.</p>
+              </li>
+            </ul>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Bu özellikler birlikte, bir sayı formatının çıkarımda kullanılan değerleri ne kadar iyi temsil ettiğini belirleyen iki faktörü ortaya koyar:</p>
+            <ul class="liste_puce">
+              <li>
+                <p class="liste_txt_courant_ssalinea" lang="tr-TR">
+                  <b>Dinamik aralık:</b> Formatta temsil edilebilen en düşük ve en yüksek değer arasındaki fark.</p>
+              </li>
+              <li>
+                <p class="liste_txt_courant_ssalinea" lang="tr-TR">
+                  <b>Granülerlik:</b> Tek bir ölçek faktörü boyunca nicemlenen parametre veya diğer değerlerin sayısı.</p>
+              </li>
+            </ul>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Kalite kaybı olmadan düşük hassasiyetli çıkarım için dinamik aralık esastır. 16 bit 65.536 farklı değeri temsil edebilirken, 8 bit yalnızca 256 farklı değeri temsil edebilir. Dinamik aralık, bu değerlerin dağılımıdır -mevcut en küçük ve en büyük değer arasındaki farktır.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Dinamik aralık, kayan noktalı formatların çıkarım için neden tamsayı formatlarından daha iyi olduğunu açıklar. Kayan noktalı formatların üç özelliği vardır:</p>
+            <ul class="liste_puce">
+              <li>
+                <p class="liste_txt_courant_ssalinea" lang="tr-TR">
+                  <b>İşaret: </b>Sayının pozitif mi negatif mi olduğunu temsil eden tek bir bit.</p>
+              </li>
+              <li>
+                <p class="liste_txt_courant_ssalinea" lang="tr-TR">
+                  <b>Üs: </b>Bir araya geldiğinde bir üs faktörünü temsil eden bir bit kümesi.</p>
+              </li>
+              <li>
+                <p class="liste_txt_courant_ssalinea" lang="tr-TR">
+                  <b>Mantissa: </b>Bir araya geldiğinde, ikinin üs kuvvetiyle çarpılan taban değeri temsil eden bir bit kümesi.</p>
+              </li>
+            </ul>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">
+              <span epub:type="pagebreak" id="page_123" title="123" role="doc-pagebreak"/>E4M3 veri formatı, bir FP8 sayısının 4 bitlik bir üsse ve 3 bitlik bir mantissaya sahip olduğu, kalan bitin de işaret için kullanıldığı anlamına gelir. Tamsayı formatlarında yalnızca işaret ve değer bitleri bulunur.</p>
+            <figure class="fig" id="fig-044">
+              <div class="imagelarge">
+                <img src="images/fig_43.jpg" alt="" class="imagelarge" role="presentation"/>
+              </div>
+              <figcaption class="leg">
+                <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">
+                  <b>Şekil 5.1: </b>Kayan noktalı sayı formatlarında işaret bitinin yanı sıra hem üs hem de mantissa bitleri bulunur.</p>
+              </figcaption>
+            </figure>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Kayan noktalı sayılardaki üs, daha yüksek bir dinamik aralık sağlar, yani çok büyük ve çok küçük sayıları daha iyi ifade edebilir. Bu önemlidir, çünkü aykırı değerler çıkarımda önemlidir ve kayan noktalı sayı formatları nicemleme sonrasında aykırı değerleri daha iyi temsil eder.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Kayan noktalı formatlar içinde, her hassasiyet seviyesinde FP4, MXFP4 ve NVFP4 gibi birden fazla seçenek vardır. Bu formatlar granülerlik açısından, yani tek bir ölçek faktörü ile nicemlenen değer sayısı açısından farklılık gösterir.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Nicemleme şu düzeylerde uygulanabilir:</p>
+            <ul class="liste_puce">
+              <li>
+                <p class="liste_txt_courant_ssalinea" lang="tr-TR">
+                  <b>Tensor düzeyi: </b>Tüm QKV tensörü için tek bir ölçek faktörü hesaplayın.</p>
+              </li>
+              <li>
+                <p class="liste_txt_courant_ssalinea" lang="tr-TR">
+                  <b>Kanal düzeyi: </b>Tensör içindeki her özellik vektörü için farklı bir ölçek faktörü hesaplayın.</p>
+              </li>
+              <li>
+                <p class="liste_txt_courant_ssalinea" lang="tr-TR">
+                  <b>Blok düzeyi: </b>Her özellik vektörü içinde, vektörü N değerlik bloklara bölün ve her blok için bir ölçek faktörü hesaplayın.</p>
+              </li>
+            </ul>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">
+              <span epub:type="pagebreak" id="page_124" title="124" role="doc-pagebreak"/>Daha granüler nicemleme, aykırı değerleri yumuşatma olasılığını azaltarak kaliteyi korur. Ancak daha fazla granülerlik, ölçek faktörlerini depolamak ve uygulamak için daha fazla ek yük getirir.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR"><i>Blackwell</i> tarafından desteklenen yeni sayı formatları olan MXFP8 ve MXFP4, her 32 parametrede bir blok bazlı ölçek faktörü hesaplayan "mikro ölçeklendirme" (microscaling) formatlarıdır ve bu sayede bu formatların daha düşük dinamik aralığının etkisini azaltırlar.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">NVIDIA'nın 4-bit formatı olan NVFP4, 16'lık bir blok boyutu ve 4-bit formatların yol açtığı kalite kaybını daha da azaltmak için ikincil 32-bit bir global ölçek faktörü ile MX formatlarından bile daha yüksek bir granülerlik sunar.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Mikro ölçeklendirme formatının ödünleşimi, küçük blok ölçek faktörünün de bellekte saklanması gerektiği, bu nedenle nicemlemeden elde edilen performans kazanımlarının biraz azalmasıdır. Ayrıca, hem tensör hem de blok ölçek faktörlerinin uygulanması gerekir, bu da biraz compute ek yükü getirir. <i>Blackwell</i> <i>GPU</i>'ları bu ek yükü Tensor Core'larda ölçek faktörü uygulaması üzerinden telafi eder.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Bu kitabın odağı veri merkezinde çıkarım mühendisliği olsa da, nicemleme özellikle büyük modeller için yerel ve uç (edge) çıkarım açısından da önemli bir konudur. İkili bir model depolama formatı olan GGUF, bireysel araştırmacıların ve şirketlerin <i>DeepSeek</i> gibi devasa modelleri Apple bilgisayarlar gibi tüketici donanımlarına sığdırmasıyla, <i>Hugging Face</i> üzerinde yüksek oranda nicemlenmiş modelleri dağıtmak için en popüler seçimdir.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Bu nicemleme stratejileri, modelin belirli katmanlarının veya diğer bileşenlerinin orijinal hassasiyetinde bırakıldığı, diğerlerinin ise bir bit kadar az hassasiyete sahip tamsayılara nicemlendiği dinamik nicemleme yoluyla kalite kaybıyla mücadele eder. Dinamik formatlar ortalama hassasiyetlerini temsil eder, bu yüzden <i>fine-tuning</i> laboratuvarı <i>Unsloth</i>'un popüler 1,58-bit nicemlemesi gibi şeyler görebilirsiniz.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Bu dinamik nicemlemeler etkileyici mühendislik başarıları olsa ve yerel çıkarım için harika olsa da, üretim sistemleri üzerinde çalışan çıkarım mühendisleri kayan noktalı sayı formatlarına bağlı kalmalıdır -tamsayı formatları, dinamik aralık eksiklikleri nedeniyle kaliteye duyarlı iş yükleri için uygun değildir.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">
+              <span epub:type="pagebreak" id="page_125" title="125" role="doc-pagebreak"/>Bunun yerine, 8-bit kayan noktalı formatlar (FP8, MXFP8) genellikle kaliteden ödün vermeden performansı iyileştirmek için en uygun noktadır. FP4 umut vericidir, özellikle daha yüksek doğruluk için daha yüksek bir granülerlik düzeyi sunan NVFP4 formatı, ama FP8 ve MXFP8, özellikle <i>KV cache</i>'i nicemlerken en fazla esnekliği sağlar.</p>
+          </div>
+          <div class="niv2" id="niv2-046">
+            <h4 epub:type="title" class="int_niv2" lang="tr-TR">5.1.2   Nicemleme Yaklaşımları</h4>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Bir modelin parametre sayısı arttıkça nicemlemeye karşı duyarlılığı azalır, çünkü her bir parametrenin önemi azalır. Ancak çok büyük modeller için bile dikkatli bir şekilde nicemleme yapmak esastır.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Nicemleme, eğitim sırasında veya sonrasında gerçekleşebilir:</p>
+            <ul class="liste_puce">
+              <li>
+                <p class="liste_txt_courant_ssalinea" lang="tr-TR">
+                  <b>Nicemleme farkındalı eğitim (quantization-aware training): </b>Nihai yakınsanan ağırlıkların belirli bir hassasiyette doğru olmasını sağlamak için ağırlıkları ve ölçek faktörlerini birlikte eğitmek.</p>
+              </li>
+              <li>
+                <p class="liste_txt_courant_ssalinea" lang="tr-TR">
+                  <b>Eğitim sonrası nicemleme (post-training quantization): </b>Ölçek faktörlerini hesaplayıp kalibrasyon yoluyla doğruluğu koruyarak bitmiş model ağırlıklarını yeni bir hassasiyete dönüştürmek.</p>
+              </li>
+            </ul>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Bazı laboratuvarlar, MXFP4 formatında <i>GPT</i>-OSS ve INT4 formatında <i>Kimi</i> K2 Thinking gibi nicemleme farkındalı eğitimle oluşturulmuş modeller yayınlasa da, açık modellerle çalışan çıkarım mühendisleri yalnızca bitmiş ağırlıklarla çalıştıkları için eğitim sonrası nicemleme yapabilme imkânına sahiptir.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Eğitim sonrası nicemleme için önde gelen bir araç, pruning, distillation ve sparsity'yi de destekleyen açık kaynaklı bir kütüphane olan NVIDIA <i>TensorRT</i> Model Optimizer'dır (ModelOpt). ModelOpt çıktıları tüm çıkarım motorlarıyla (<i>vLLM</i>, <i>SGLang</i>, <i>TensorRT-LLM</i>) uyumludur.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Bir hassasiyet seçtikten sonra, eğitim sonrası nicemleme yapmadan önce verilmesi gereken iki karar vardır:</p>
+            <ol class="liste_num">
+              <li>
+                <p class="liste_txt_courant_ssalinea" lang="tr-TR">Modelin hangi bölümleri (ağırlıklar, aktivasyonlar, <i>KV cache</i>, <i>attention</i>) nicemlenmeli?</p>
+              </li>
+              <li>
+                <p class="liste_txt_courant_ssalinea" lang="tr-TR">Hangi sayı formatı uygun dinamik aralığı ve granülerliği sunar?</p>
+              </li>
+            </ol>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">
+              <span epub:type="pagebreak" id="page_126" title="126" role="doc-pagebreak"/>Bu kararlar, nicemlemeyi ikili bir seçimden performans ve kalite konusunda bir ödünleşim yelpazesine dönüştürür.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Bir modelin bileşenlerinin nicemlemeye karşı duyarlılığı değişkenlik gösterir. Daha duyarlı bileşenlerin hassasiyetini azaltmak, kalite kaybı riskini daha da artırır. En az duyarlıdan en çok duyarlıya:</p>
+            <ol class="liste_num">
+              <li>
+                <p class="liste_txt_courant_ssalinea" lang="tr-TR">
+                  <b>Ağırlıklar: </b>Özellikle doğrusal katmanlar nicemlemeye en az duyarlı olanlardır.</p>
+              </li>
+              <li>
+                <p class="liste_txt_courant_ssalinea" lang="tr-TR">
+                  <b>Aktivasyonlar: </b>Aktivasyon fonksiyonlarının ara çıktısı nicemlemeye yalnızca biraz duyarlıdır. Aktivasyon fonksiyonlarının kendisinin, modelin ağırlıklarının çok küçük bir kısmını oluşturduğu için nadiren nicemlendiğini unutmayın.</p>
+              </li>
+              <li>
+                <p class="liste_txt_courant_ssalinea" lang="tr-TR">
+                  <b><i>KV cache</i>: </b><i>Attention</i> hesaplamasından gelen önbelleğe alınmış değerler nicemlemeye orta düzeyde duyarlıdır.</p>
+              </li>
+              <li>
+                <p class="liste_txt_courant_ssalinea" lang="tr-TR">
+                  <b><i>Attention</i>: </b>Bir modelin <i>attention</i> katmanları, özellikle <i>softmax</i> gibi denklemler söz konusu olduğunda nicemlemeye son derece duyarlıdır.</p>
+              </li>
+            </ol>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Bu bileşenlerin her birinin içinde, nicemleme konusunda daha seçici olabilirsiniz.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Boyutları sayesinde genellikle nicemlemeye en az duyarlı olan doğrusal katmanlarda ve aktivasyonlarda bile, sinir ağının giriş ve çıkış katmanı gibi erken ve geç katmanlar daha duyarlı oldukları için orijinal hassasiyetlerinde bırakılabilir.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Ağırlıkları ve aktivasyonları nicemlemek doğrudan performansa yardımcı olurken, <i>KV cache</i> nicemlemesi prefix önbellekleme ve disaggregation gibi tekniklere ek bir destek sağlar. <i>KV cache</i> değerli bir kaynaktır. Onu nicemlemek, çıkarım motorlarının daha fazlasını bellekte saklamasına ve daha hızlı okumasına olanak tanır.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Ancak her <i>token</i> için <i>KV cache</i>, sonraki her <i>token</i> tarafından kullanılır. Bu, nicemleme tarafından ortaya çıkarılan hassasiyet hatalarının <i>token</i>'dan <i>token</i>'a birikebileceği anlamına gelir.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Hataların birikmesi, <i>attention</i> katmanlarının nicemleme açısından en riskli olmasının tam nedenidir. <i>Attention</i> yalnızca dinamik aralığa çok duyarlı olmakla kalmaz, her <i>attention</i> hesaplaması bir önceki atten<span epub:type="pagebreak" id="page_127" title="127" role="doc-pagebreak"/>tion hesaplamasının sonuçlarına da dayanır. Binlerce <i>token</i>'lık bir dizi boyunca, bu hatalar hızla birikir.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">En agresif nicemleme şemaları dışında hepsi, <i>softmax</i> gibi fonksiyonları orijinal hassasiyetlerinde çalıştırır.</p>
+            <figure class="fig" id="fig-045">
+              <div class="image">
+                <img src="images/fig_44.jpg" alt="" class="image" role="presentation"/>
+              </div>
+              <figcaption class="leg">
+                <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">
+                  <b>Şekil 5.2: </b>Nicemleme riski ağırlıklar ve aktivasyonlar için düşük, <i>KV cache</i> için orta, <i>attention</i> için ise yüksektir.</p>
+              </figcaption>
+            </figure>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Düşük hassasiyetli çıkarıma orta yollu bir yaklaşım, seçili doğrusal katmanları, aktivasyonları ve genellikle <i>KV cache</i> değerlerini dikkatlice nicemlemek için yüksek dinamik aralığa sahip bir format -mümkünse MXFP8 gibi bir mikro ölçeklendirme formatı- kullanır. Bu yüksek dinamik aralıklı formatlarla bile, <i>attention</i> katmanının bileşenleri nadiren nicemlenir.</p>
+          </div>
+          <div class="niv2" id="niv2-047">
+            <h4 epub:type="title" class="int_niv2" lang="tr-TR">5.1.3   <span epub:type="pagebreak" id="page_128" title="128" role="doc-pagebreak"/>Kalite Etkisini Ölçmek</h4>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Üretime hazır nicemleme için standart, sıfır algılanabilir kalite kaybıdır. Bir modeli nicemledikten sonra, çıktı kalitesini orijinal hassasiyetle karşılaştırarak titizlikle test etmek esastır.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Nicemleme sonrasında model kalitesini kontrol etmenin üç yöntemi vardır:</p>
+            <ol class="liste_num">
+              <li>
+                <p class="liste_txt_courant_ssalinea" lang="tr-TR">
+                  <b>Perplexity:</b> Nicemlenmiş model için perplexity skorunu hesaplayın ve orijinaliyle karşılaştırın.</p>
+              </li>
+              <li>
+                <p class="liste_txt_courant_ssalinea" lang="tr-TR">
+                  <b>Zeka benchmark'ları:</b> MMLU veya SWE-bench gibi standart bir zeka benchmark'ı çalıştırın ve orijinal skorlarla karşılaştırın.</p>
+              </li>
+              <li>
+                <p class="liste_txt_courant_ssalinea" lang="tr-TR">
+                  <b>Özel değerlendirmeler (eval):</b> Nicemlenmiş model üzerinde ürüne özgü bir değerlendirme (eval) paketi çalıştırın ve orijinal ağırlıklarla karşılaştırın.</p>
+              </li>
+            </ol>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Her durumda, gürültüden ayırt edilemeyecek bir skor farkı aranır. <i>LLM</i>'ler deterministik değildir, bu yüzden skorlar çalıştırmadan çalıştırmaya biraz değişir.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Kalite için en basit kontrol perplexity'dir. Modelden çıktı üretmesini istemek yerine, perplexity modele beklenen çıktı dizilerini verir ve modelin bu <i>token</i>'ları tahmin etme olasılığını hesaplar.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Daha yüksek bir perplexity, modelin dizilerden daha çok "şaşırdığı" anlamına gelir -<i>token</i> tahmin etmesi beklenen bir modelden istenen bir şey değildir. Nicemleme sonrasında, perplexity'de minimal bir artış aranır.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Daha kapsamlı bir kalite kontrolü, kamuya açık bir zeka benchmark'ına veya daha da iyisi, gerçek dünyadaki beklenen kullanımınızla eşleşen alana özgü bir eval'a dayanır. Eval'larda, kalite skorunda minimal bir düşüş aranır.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Nicemlemenin etkisinin tam resmini elde etmenin en iyi yolu, üç kontrol türünü de çalıştırmak ve orijinal model ağırlıklarıyla elma elmayla karşılaştırmalar yapmaktır.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Nicemlemenin ikili bir karar değil, bir ölçek olduğunu unutmayın. FP4 yerine FP8'e nicemleyerek ya da yalnızca ağırlıkların nicemlenmesi gibi modelin daha az bileşenini nicemleyerek, daha düşük kalite kaybı riskiyle yine de bazı performans iyileştirmeleri elde edebilirsiniz.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">
+              <span epub:type="pagebreak" id="page_129" title="129" role="doc-pagebreak"/>Yüksek derecede hassas bir alanda çalışıyorsanız ve model kalitesini riske atamıyorsanız, merak etmeyin: bu bölümdeki diğer her teknik kalite açısından kayıpsızdır (lossless).</p>
+          </div>
+        </div>
+        <!--@@niv1-->
+        <div class="niv1" id="niv1-028">
+          <h3 epub:type="title" class="int_niv1" lang="tr-TR">5.2   Spekülatif Decoding</h3>
+          <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR"><i>LLM</i> çıkarımının <i>decode</i> aşaması, <i>token</i>'ların birer birer üretildiği otoregresif bir süreçtir. <i>Decode</i>'daki darboğaz bellek bant genişliğidir; düşük ile orta <i>batch</i> boyutlarında ağırlıklar bellekten okunurken compute boşta kalır.</p>
+          <p class="bl"> </p>
+          <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Spekülatif decoding, hedef model (target model) üzerinden yapılan her <i>forward pass</i> için birden fazla <i>token</i> üretmeye çalışmak amacıyla bu boşta duran compute'tan yararlanır. Eğer bir çıkarım motoru, ağırlıkların bellekten her bir gidiş-dönüşünde iki, üç hatta daha fazla <i>token</i> üretebilseydi, saniyede çok daha fazla <i>token</i> üretirdi. Spekülatif decoding yalnızca <i>TPS</i>/<i>ITL</i>'yi iyileştirir, <i>TTFT</i>'yi değil.</p>
+          <p class="bl"> </p>
+          <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Spekülatif decoding için birden fazla algoritma vardır. Bunlar ortak bir mekanizmayı paylaşır:</p>
+          <ol class="liste_num">
+            <li>
+              <p class="liste_txt_courant_ssalinea" lang="tr-TR">Spekülatör bir veya daha fazla <b>draft <i>token</i></b> üretir.</p>
+            </li>
+            <li>
+              <p class="liste_txt_courant_ssalinea" lang="tr-TR">Hızlandırmaya çalıştığınız altta yatan model olan <b>hedef model (target model)</b>, bu <i>token</i>'ların modelin üretmiş olacağı şeyle eşleşip eşleşmediğini kontrol etmek için <b>doğrulama (validation)</b> yapar.</p>
+            </li>
+            <li>
+              <p class="liste_txt_courant_ssalinea" lang="tr-TR">Hedef model geçerli draft <i>token</i>'ları kabul eder ve kendisi de ek bir <i>token</i> üreterek <i>forward pass</i>'i tamamlar.</p>
+            </li>
+          </ol>
+          <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Bu, her <i>forward pass</i>'te ya da <i>decode</i> döngüsünden geçen her iterasyonda N+1 <i>token</i> üretir; burada N kabul edilen draft <i>token</i> sayısıdır.</p>
+          <p class="bl"> </p>
+          <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Draft <i>token</i> üretmek bedava değildir, hem compute hem de bellek gerektirir. Ancak hedef modelin bir draft <i>token</i>'ı doğrulaması, orijinal bir <i>token</i> üretmesinden çok daha hızlıdır. Bir sudoku bulmacası hayal edin: çözmek zordur, ama çözümün doğru olup olmadığını kontrol etmek çok kolaydır. Hedef model için bir <i>token</i> üretmek sudoku çözmek gibidir, bir draft <i>token</i>'ı doğrulamak ise bitmiş bir sudokuyu kontrol etmek gibidir.</p>
+          <p class="bl"> </p>
+          <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Herhangi bir spekülatif decoding stratejisinden elde edilen performans artışı üç faktöre bağlıdır:</p>
+          <ol class="liste_num">
+            <li>
+              <p class="liste_txt_courant_ssalinea" lang="tr-TR">
+                <b>Draft <i>token</i> maliyeti: </b>Bir draft <i>token</i> üretmek için geçen süre.</p>
+            </li>
+            <li>
+              <p class="liste_txt_courant_ssalinea" lang="tr-TR">
+                <span epub:type="pagebreak" id="page_130" title="130" role="doc-pagebreak"/>
+                <b>Draft dizisi uzunluğu: </b>Her <i>forward pass</i> başına üretilen draft <i>token</i> sayısı.</p>
+            </li>
+            <li>
+              <p class="liste_txt_courant_ssalinea" lang="tr-TR">
+                <b><i>Token</i> kabul oranı:</b> Hedef model tarafından kabul edilen draft <i>token</i>'ların yüzdesi.</p>
+            </li>
+          </ol>
+          <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR"><i>Token</i> kabul oranı draft dizisinin başında yüksektir, ama draft <i>token</i>'lar dizinin derinliklerinde güvenilirliğini yitirir.</p>
+          <figure class="fig" id="fig-046">
+            <div class="image">
+              <img src="images/fig_45.jpg" alt="" class="image" role="presentation"/>
+            </div>
+            <figcaption class="leg">
+              <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">
+                <b>Şekil 5.3: </b>Draft <i>token</i> üretimi ve doğrulamasından, prefix kabulüne ve ardından gelen <i>token</i> üretimine kadar spekülatif decoding.</p>
+            </figcaption>
+          </figure>
+          <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">
+            <span epub:type="pagebreak" id="page_131" title="131" role="doc-pagebreak"/>Kısa, yüksek yüzdeli diziler hedeflemek gerekir, çünkü <i>token</i> üretmek ve doğrulamak, orijinal modelde <i>token</i> üretmeye kıyasla ucuz olsa da yine de anlamlı bir ek yük getirir. Ayrıca, tek bir draft <i>token</i> yanlış olarak reddedildiğinde, dizideki sonraki tüm <i>token</i>'lar da reddedilir.</p>
+          <p class="bl"> </p>
+          <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Spekülasyonla çalışmak ilginçtir çünkü <i>token</i> kabul oranını etkileyen pek çok faktör vardır. En büyük faktör <i>temperature</i>'dır -daha yüksek <i>temperature</i>'lar tahmin edilmesi daha zor <i>token</i> dağılımları doğurur ve spekülatif decoding'in etkinliğini azaltır. Ama draft model veya spekülasyon için kullanılan ek başlığın (head) örneğin matematikte mi yoksa tarihte mi daha iyi olduğu gibi konu başlığı kadar basit faktörler bile kabul oranında fark yaratabilir.</p>
+          <p class="bl"> </p>
+          <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Spekülatif decoding'deki bir başka kısıtlama da, boşta compute döngülerinin bulunduğu düşük <i>batch</i> boyutlarında en kullanışlı olmasıdır. Daha yüksek <i>batch</i> boyutlarında, compute doğrulamayı karşılayamayacak kadar doygun hale geldiğinden spekülatif decoding dinamik olarak devre dışı bırakılmalıdır.</p>
+          <p class="bl"> </p>
+          <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Her spekülasyon algoritması bu ödünleşimleri farklı şekilde yönetir ve duruma uygun doğru algoritmanın dikkatli bir şekilde uygulanması <i>TPS</i>'de büyük iyileştirmelere yol açabilir.</p>
+          <div class="niv2" id="niv2-048">
+            <h4 epub:type="title" class="int_niv2" lang="tr-TR">5.2.1   Draft-Target Spekülatif Decoding</h4>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Spekülatif decoding'in orijinal yöntemi iki model kullanır:</p>
+            <ul class="liste_puce">
+              <li>
+                <p class="liste_txt_courant_ssalinea" lang="tr-TR">
+                  <b>Draft model: </b>Spekülatif draft <i>token</i>'lar üreten ek bir model.</p>
+              </li>
+              <li>
+                <p class="liste_txt_courant_ssalinea" lang="tr-TR">
+                  <b>Hedef model (target model): </b>Artık olağan <i>decode</i>'a ek olarak draft <i>token</i>'ları da doğrulayan orijinal model.</p>
+              </li>
+            </ul>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Draft-target spekülatif decoding yapılandırırken alınacak en önemli karar, hangi draft modelin kullanılacağıdır. İyi bir draft model, minimal kaynak gerektirirken yüksek bir <i>token</i> kabul oranına sahiptir.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Draft modeller çoğunlukla hedef modelle aynı ailenin daha küçük üyeleridir, çünkü <i>tokenizer</i>'ları ve davranışlarını paylaşırlar. Genel bir kural olarak, draft model parametre sayısı bakımından hedef modelden en az on kat daha küçük olmalıdır. <i>Fine-tuning</i> veya damıtma (distillation), bu küçük modellere hedef model gibi davranmayı öğreterek <i>token</i> <span epub:type="pagebreak" id="page_132" title="132" role="doc-pagebreak"/>kabul oranını iyileştirebilir.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Draft-target spekülatif decoding, herhangi bir eğitim veya <i>fine-tuning</i> yapmadan hızlıca kurmak istediğinizde iyi bir seçimdir.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Ancak diğer spekülasyon algoritmaları genellikle daha iyi performans sunar. Draft-target, herhangi bir spekülatif decoding yönteminin getirdiği en fazla ek yükü getirir. Draft model küçük olsa da, çıkarım motoru draft modelin ağırlıklarını, aktivasyonlarını ve <i>KV cache</i>'ini bellekte saklamalı ve draft model <i>prefill</i>'i için compute döngüleri ayırmalıdır. Ayrıca, draft ve hedef modelin kaynaklar için rekabet etmemesi için eşgüdümlü çalışması gerekir, ancak <i>TensorRT-LLM</i> gibi çıkarım motorları bu model orkestrasyonunu üstlenir.</p>
+          </div>
+          <div class="niv2" id="niv2-049">
+            <h4 epub:type="title" class="int_niv2" lang="tr-TR">5.2.2   <i>Medusa</i></h4>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR"><i>Medusa</i>, draft-target spekülasyonuna ilk alternatiflerden biriydi. <i>Medusa</i>, spekülasyon yapmak için bir draft model işletmenin getirdiği karmaşıklık ve ek yükü, bunun yerine hedef modeli her <i>forward pass</i>'te ek <i>token</i>'lar üretecek şekilde <i>fine-tuning</i> yaparak ele alır.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR"><i>Medusa</i> için bir modeli <i>fine-tune</i> etmek, modele ek <i>decoder</i> başlıkları (head) eklemek anlamına gelir. Bir <i>LLM</i>'in olağan mimarisi tek bir <i>decoder</i> başlığı içerir, ancak <i>Medusa</i>, sıralı draft <i>token</i>'lar üreten iki ila dört ek başlık ekler.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Draft-target spekülasyonunda olduğu gibi, draft <i>token</i>'lar bir sonraki <i>forward pass</i>'te doğrulanır.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR"><i>Medusa</i>, draft <i>token</i> sayısı ve draft <i>token</i> kabul oranı açısından hâlâ sınırlıdır ve bugün üretimde yaygın olarak kullanılmamaktadır. Ancak <i>Medusa</i>, <i>EAGLE</i> gibi daha popüler tekniklere ilham vermiştir.</p>
+            <figure class="fig" id="fig-047">
+              <div class="imagelarge">
+                <img src="images/fig_46.jpg" alt="" class="imagelarge" role="presentation"/>
+              </div>
+              <figcaption class="leg">
+                <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">
+                  <b>
+                    <span epub:type="pagebreak" id="page_133" title="133" role="doc-pagebreak"/>Şekil 5.4: </b><i>Medusa</i> başlıklarının her biri, hedef model tarafından üretilen <i>token</i>'ın üzerine bir draft <i>token</i> üretir.</p>
+              </figcaption>
+            </figure>
+          </div>
+          <div class="niv2" id="niv2-050">
+            <h4 epub:type="title" class="int_niv2" lang="tr-TR">5.2.3   <i>EAGLE</i></h4>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Hazır eğitilmiş bir modeli draft model olarak kullanmanın temel sorunu, <i>Qwen</i> 0,5B gibi bir modelin ucuz donanımda iyi bir bağımsız <i>LLM</i> olacak şekilde tasarlanmış olması, bir B200 üzerinde draft <i>token</i> spekülasyonu yapacak şekilde değil. Bu draft modellerin çalıştırılması verimsizdir ve görece düşük bir kabul oranı sunar.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR"><i>EAGLE</i> bir alternatif sunar: sıfırdan eğitilmiş, çok yüksek bir kabul oranıyla sekize kadar (<i>Medusa</i>'nın iki katı kadar) draft <i>token</i> dizisi üretmek üzere amaca özel tasarlanmış bir draft model.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Çıkarım sırasında, <i>LLM</i>'ler katmanlar arasındaki gizli durumlar (hidden states) biçiminde tahmin edilen <i>token</i>'lar hakkında çok fazla bağlam biriktirir. Geleneksel draft modeller bu bilgiye erişemez.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR"><i>EAGLE</i>, girdi olarak gizli durumları kabul edip çıktı olarak spekülatif <i>token</i>'lar üretecek şekilde eğitilmiş bir draft modeldir. Özellikle, biri erken bir katmandan, biri orta bir katmandan ve biri de geç bir katmandan olmak üzere üç gizli durumdan oluşan bir <span epub:type="pagebreak" id="page_134" title="134" role="doc-pagebreak"/>küme üzerinde eğitilir. <i>EAGLE</i> genellikle bir milyar parametreden azdır ve ek eğitim verisi verildiğinde iyi ölçeklenir.</p>
+            <figure class="fig" id="fig-048">
+              <div class="imagelarge">
+                <img src="images/fig_47.jpg" alt="" class="imagelarge" role="presentation"/>
+              </div>
+              <figcaption class="leg">
+                <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">
+                  <b>Şekil 5.5: </b><i>EAGLE</i> spekülatif modelleri girdi olarak gizli durumları alır ve çıktı olarak draft <i>token</i> üretir.</p>
+              </figcaption>
+            </figure>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Pratikte, <i>TensorRT-LLM</i> gibi bir çıkarım motoru ile <i>EAGLE</i> kullanırken, uygulamalar genellikle basittir; eğitim sonrası <i>EAGLE</i> oluşturma ve tek dizilik spekülasyon ile çalışır.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR"><i>EAGLE</i>, hedef modelle aynı modüle (<i>PyTorch</i> sınıfı) iliştirilebilir, böylece her <i>forward pass</i> hem hedef model hem de <i>EAGLE</i> spekülatörü üzerinde çıkarım çalıştırır. Bu birleşik <i>pipeline</i>, draft ve hedef modelleri eşgüdümlemek için birden fazla <i>CPU</i> gidiş-dönüşünün gerekli olduğu draft-target decoding'in diğer sorununu da çözer.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR"><i>EAGLE</i>, <i>EAGLE</i> başlıklarını eğitecek bilgi ve kaynaklara sahip çıkarım mühendisleri arasında genel kullanım için tercih edilen spekülasyon algoritmasıdır ve çıkarım motorları tarafından iyi desteklenmektedir. Diğer spekülasyon teknikleri gibi, gecikmeyi iyileştirmek için <i>EAGLE</i>'ı benimsemek daha küçük <i>batch</i> boyutları gerektirir, bu da verimi düşürür ve maliyeti artırır.</p>
+          </div>
+          <div class="niv2" id="niv2-051">
+            <h4 epub:type="title" class="int_niv2" lang="tr-TR">5.2.4   N-gram Spekülasyonu ve Lookahead Decoding</h4>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">N-gram spekülasyonu diğer spekülasyon türlerinden farklı bir mekanizma kullanır. Bir draft model yoktur.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Bunun yerine, <i>KV cache</i>'i üretmeyle paralel olarak çıkarım motoru bir n-gram sözlüğü oluşturur. N-gram sözlüğü, tek bir başlangıç <i>token</i>'ını gözlemlenen N <i>token</i>'lık bir diziye (n-gram'a) eşler.</p>
+            <figure class="fig" id="fig-049">
+              <div class="imagelarge">
+                <img src="images/fig_48.jpg" alt="" class="imagelarge" role="presentation"/>
+              </div>
+              <figcaption class="leg">
+                <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">
+                  <b>
+                    <span epub:type="pagebreak" id="page_135" title="135" role="doc-pagebreak"/>Şekil 5.6: </b>Bir n-gram sözlüğü, önekleri olası eklerle eşler ve kod gibi kısıtlı diller için özellikle kullanışlıdır.</p>
+              </figcaption>
+            </figure>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Bu n-gram sözlüğü, girdi metninden gelen yaygın dizileri içerir ve ilk kez <i>prefill</i> sırasında oluşturulur. <i>Decode</i> sırasında, üretilen <i>token</i> sözlüğe beslenir ve mevcut herhangi bir ek draft <i>token</i> olarak seçilir. Bir sonraki <i>forward pass</i>'te, hedef model bu draft <i>token</i>'ları her zamanki gibi doğrular.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">N-gram spekülasyonunun <i>EAGLE</i>'a kıyasla avantajı, dizilerin çok daha uzun olabilmesidir. <i>EAGLE</i> makul bir kabul oranıyla sekiz kadar draft <i>token</i> üretebilirken, n-gram dizileri on <i>token</i>'ı aşabilir.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Ancak n-gram'lar için kabul oranı yalnızca model çıktısının içeriği model girdisine benzer olduğunda yüksektir. N-gram spekülasyonu, sözdiziminin öngörülebilir olduğu ve çıktının girdiyle yakından eşleştiği kod tamamlama ve kod revizyonu için en çok kullanılır. Ancak bu özel alanda <i>EAGLE</i>'ı kolayca geride bırakır.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">N-gram spekülasyonuna benzer bir yöntem de, sözlüğü doldurmak için çıkarım sırasında n-gram'lar üreten Lookahead Decoding'dir. Lookahead Decoding, yüksek oranda tekrarlayan bağlama daha az bağımlı olduğu için n-gram spekülasyonundan daha geneldir, ancak n-gram'ları üretmek için ekstra compute gerektirir.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Her spekülatif decoding algoritması, tam bir çıktı dizisi üretmek için gereken toplam <i>forward pass</i> sayısını azaltmayı, genel gecikmeyi ve özellikle <i>decode</i> sırasında kullanıcı başına saniyedeki <i>token</i> sayısını <span epub:type="pagebreak" id="page_136" title="136" role="doc-pagebreak"/>iyileştirmeyi hedefler. N-gram spekülasyonu kod tamamlama ve benzeri görevlerde üstündür, Lookahead Decoding ise fazla compute'a sahip sistemlerde genelleşir.</p>
+          </div>
+        </div>
+        <!--@@niv1-->
+        <div class="niv1" id="niv1-029">
+          <h3 epub:type="title" class="int_niv1" lang="tr-TR">5.3   Önbellekleme</h3>
+          <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR"><i>Prefill</i> sırasında, çıkarım motoru girdi dizisi üzerinde bir <i>KV cache</i> (her <i>token</i> için anahtar ve değerlerden oluşan bir depo) oluşturur. Ardından <i>decode</i> sırasında her <i>token</i> için <i>KV cache</i>'i günceller. Çıkarım otoregresif olduğundan, her yeni <i>token</i>'ın değeri dizideki önceki her <i>token</i>'ın değerine bağlıdır.</p>
+          <p class="bl"> </p>
+          <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Her çıkarım motoru, istek bazında varsayılan olarak KV önbellekleme kullanır. KV önbellekleme olmadan, dizideki önceki her değerin sonraki her <i>token</i> için yeniden hesaplanması gerekeceğinden <i>LLM</i> çıkarımı dayanılmaz derecede yavaş olurdu.</p>
+          <p class="bl"> </p>
+          <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Ancak mühendisler, <i>KV cache</i>'i yalnızca her çıkarım dizisi içinde değil, istekler arasında yeniden kullanarak ondan daha fazla yarar elde edebilir.</p>
+          <div class="niv2" id="niv2-052">
+            <h4 epub:type="title" class="int_niv2" lang="tr-TR">5.3.1   Prefix Önbellekleme ve KV Cache Yeniden Kullanımı</h4>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Şekil 5.7'de, çoğu <i>tokenizer</i>'da dörder <i>token</i>'dan oluşan aşağıdaki iki <i>prompt</i>'u ele alın.</p>
+            <figure class="fig" id="fig-050">
+              <div class="imagelarge">
+                <img src="images/fig_49.jpg" alt="" class="imagelarge" role="presentation"/>
+              </div>
+              <figcaption class="leg">
+                <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">
+                  <b>Şekil 5.7: </b>İki <i>token</i>'lık eşleşen öneklere sahip bir dört <i>token</i>'lık dizi çifti.</p>
+              </figcaption>
+            </figure>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">
+              <span epub:type="pagebreak" id="page_137" title="137" role="doc-pagebreak"/>Varsayılan olarak, çıkarım motoru her promptun dört <i>token</i>'ının tamamı üzerinde <i>prefill</i> çalıştırmak zorundadır. Ama her promptun ilk <i>token</i>'ları -"Weather in"- çift arasında paylaşılan bir önek (prefix) oluşturur.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Prefix önbellekleme ile, ilk iki <i>token</i> üzerinde <i>prefill</i>'i atlayıp bunun yerine mevcut <i>KV cache</i>'i okuyarak ikinci istekte <i>TTFT</i>'yi iyileştirmek için ilk istekten gelen <i>KV cache</i>'i yeniden kullanabilirsiniz.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR"><i>Token</i> başına ödeme yapılan <i>API</i>'lerin "<i>cache</i> hit" girdi <i>token</i>'ları için "<i>cache</i> miss" <i>token</i>'larından daha az ücret aldığını gördüğünüzde, sebebi budur -önbelleğe alınmış <i>token</i>'ları yeniden kullanmak çok az compute gücü veya zaman gerektirir. Bir çıkarım mühendisi olarak, kendi dağıtımlarınızda gecikmeyi azaltmak ve verimi iyileştirmek (dolayısıyla para tasarrufu sağlamak) için aynı ilkeyi uygulayabilirsiniz.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">İki <i>token</i>'dan tasarruf etmek <i>TTFT</i> üzerinde büyük bir etki yaratmaz, ama prefix önbellekleme belirli alanlarda binlerce <i>token</i> üzerindeki <i>prefill</i>'i atlayabilir:</p>
+            <ul class="liste_puce">
+              <li>
+                <p class="liste_txt_courant_ssalinea" lang="tr-TR">
+                  <b>Karmaşık sistem promptları: </b>Agent'lar, müşteriye yönelik chatbot'lar, <i>RAG</i> iskeletleri ve tool call'lar genellikle her çağrıda uzun, karmaşık sistem promptları içerir.</p>
+              </li>
+              <li>
+                <p class="liste_txt_courant_ssalinea" lang="tr-TR">
+                  <b>Kod tamamlama: </b>Kod tamamlama, kod üretimi ve diğer kodlama fonksiyonları, paylaşılan bağlam olarak aynı binlerce kod satırının iletilmesini gerektirir.</p>
+              </li>
+              <li>
+                <p class="liste_txt_courant_ssalinea" lang="tr-TR">
+                  <b>Belgeler ve retrieval: </b>Belge özetleme, soru yanıtlama ve retrieval, kullanıcı promptlarından önce tekrarlanan bağlam ekler.</p>
+              </li>
+              <li>
+                <p class="liste_txt_courant_ssalinea" lang="tr-TR">
+                  <b>Çok turlu konuşmalar: </b>Olağan konuşmalar bir sohbet şablonundaki her mesajı geri tekrarlar, bu da her turda prefix önbelleklemeden elde edilen tasarrufu artırır.</p>
+              </li>
+            </ul>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Prefix önbellekleme, girdi dizisinin başından ilk tekrarlanmayan <i>token</i>'a kadar çalışır. Hava durumu örneğindeki dördüncü <i>token</i>, bir soru işareti, iki girdi dizisi arasında paylaşılır. Ancak önek ilk tekrarlanmayan <i>token</i>'da sona erer, bu yüzden dördüncü <i>token</i> <i>cache</i>'ten okunmaz.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Önekler ilk benzersiz <i>token</i>'da sona erdiğinden, bağlam mühendisliğiniz <i>TTFT</i> tasarruflarınızı belirler. Aynı promptlara farklı bir yaklaşımı ele alalım:</p>
+            <figure class="fig" id="fig-051">
+              <div class="imagelarge">
+                <img src="images/fig_50.jpg" alt="" class="imagelarge" role="presentation"/>
+              </div>
+              <figcaption class="leg">
+                <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">
+                  <b>
+                    <span epub:type="pagebreak" id="page_138" title="138" role="doc-pagebreak"/>Şekil 5.8: </b>Önek eşleşmesi olmayan dört <i>token</i>'lık bir dizi çifti; ilk <i>token</i>'lar farklı olduğundan sonraki üçünün aynı olması önemli değildir.</p>
+              </figcaption>
+            </figure>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Burada, sonraki her <i>token</i> aynı olsa bile iki dizi arasında en baştaki (ilk) <i>token</i> farklı olduğundan prefix önbelleklemeden herhangi bir tasarruf yoktur.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Prefix önbelleklemeden yararlanmak için, yeni <i>token</i>'ların bağlamınızda mümkün olduğunca geç yer almasını sağlayın.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Prefix önbellekleme, <i>LLM</i>'lerin otoregresif olması nedeniyle baskın <i>KV cache</i> yeniden kullanım biçimidir. Her <i>token</i> sonraki her <i>token</i>'ı etkiler, bu yüzden tek bir yeni <i>token</i>, diziler bir insan okuyucuya aynı görünse bile, modelin dizinin geri kalanını içsel olarak temsil etme biçimini değiştirir.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Ancak bu sınırlamayı aşmak için diğer <i>KV cache</i> yeniden kullanım türleri etrafında aktif araştırmalar sürüyor. Promptların ortasından gelişigüzel dizileri önbelleğe almak, hem konumsal <i>embedding</i>'leri (positional embeddings) düzeltmeyi hem de çıktı kalitesini korumak için KV girişlerini seçici olarak yeniden hesaplamayı gerektirir. CacheBlend ve LMCache gibi araçlar önek olmayan dizileri destekleyerek <i>KV cache</i> yeniden kullanımının olanaklarını genişletir.</p>
+          </div>
+          <div class="niv2" id="niv2-053">
+            <span epub:type="pagebreak" id="page_139" title="139" role="doc-pagebreak"/>
+            <h4 epub:type="title" class="int_niv2" lang="tr-TR">5.3.2   KV Cache Nerede Saklanır</h4>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR"><i>KV cache</i> çok değerlidir. Ama <i>KV cache</i>'ler çok fazla bellek kaplar ve <i>GPU</i>'ların sınırlı bir <i>VRAM</i>'i vardır.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Çıkarım motorunuzun <i>KV cache</i>'e ne kadar bellek ayıracağını yapılandırabilirsiniz. Örneğin, <i>TensorRT-LLM</i>'de şunu ayarlarsınız:</p>
+            <figure class="fig" id="fig-052">
+              <div class="imagelarge">
+                <img src="images/fig_51.jpg" alt="" class="imagelarge" role="presentation"/>
+              </div>
+              <figcaption class="leg">
+                <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">
+                  <b>Şekil 5.9: </b>Boş <i>GPU</i> belleğini <i>KV cache</i>'e ayırmak, çıkarım motorları çalıştırırken alınması gereken temel bir yapılandırma kararıdır.</p>
+              </figcaption>
+            </figure>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">180 GB <i>VRAM</i>'e sahip bir B200 <i>GPU</i> üzerinde çalışıyorsanız ve model ağırlıkları ile tamponlar için 100 GB kullandıysanız, bu kalan <i>VRAM</i>'in yüzde 80'ini, yani 64 GB'ını <i>KV cache</i>'e ayırır.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Bu ayrılan alan dolduğunda -ve hızlıca dolacaktır- kaydedilen <i>KV cache</i>'leri silmeye başlamanız gerekir, bu da gelecekteki isteklerde <i>cache</i> miss olasılığını artırır.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR"><i>KV cache</i> için daha fazla alan elde etmek için, <i>VRAM</i>'den yakındaki diğer depolama birimlerine offload yapın. <i>KV cache</i>'i saklayabileceğiniz, <i>GPU</i>'ya bant genişliği açısından azalan sırayla dört yer vardır:</p>
+            <div class="tableau" id="tableau-016">
+              <div class="table-align">
+                <table style="border-collapse:collapse; border:outset 0pt; width:100%" border="1">
+                  <colgroup style="padding:7px;">
+                    <col style="padding:7px;"/>
+                    <col style="width:28.772877287729%;"/>
+                    <col style="width:28.772877287729%;"/>
+                    <col style="width:28.772877287729%;"/>
+                  </colgroup>
+                  <thead>
+                    <tr style="padding:7px;">
+                      <th style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                        <b>Düzey</b>
+                      </th>
+                      <th style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                        <b>Bellek türü</b>
+                      </th>
+                      <th style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                        <b>Yaklaşık hız</b>
+                      </th>
+                      <th style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                        <b>Yaklaşık boyut</b>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr style="padding:7px;">
+                      <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                        <p class="txt_courant_ssalinea" lang="tr-TR">G1</p>
+                      </td>
+                      <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                        <p class="txt_courant_ssalinea" lang="tr-TR">Cihaz Belleği (<i>GPU</i> <i>VRAM</i>)</p>
+                      </td>
+                      <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                        <p class="txt_courant_ssalinea" lang="tr-TR">Saniyede terabaytlar</p>
+                      </td>
+                      <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                        <p class="txt_courant_ssalinea" lang="tr-TR">Onlarca ila yüzlerce gigabayt</p>
+                      </td>
+                    </tr>
+                    <tr style="padding:7px;">
+                      <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                        <p class="txt_courant_ssalinea" lang="tr-TR">G2</p>
+                      </td>
+                      <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                        <p class="txt_courant_ssalinea" lang="tr-TR">Ana Bellek (<i>CPU</i> RAM)</p>
+                      </td>
+                      <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                        <p class="txt_courant_ssalinea" lang="tr-TR">Saniyede onlarca ila yüzlerce GB</p>
+                      </td>
+                      <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                        <p class="txt_courant_ssalinea" lang="tr-TR">Yüzlerce gigabayttan terabaytlara</p>
+                      </td>
+                    </tr>
+                    <tr style="padding:7px;">
+                      <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                        <p class="txt_courant_ssalinea" lang="tr-TR">G3</p>
+                      </td>
+                      <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                        <p class="txt_courant_ssalinea" lang="tr-TR">Yerel SSD</p>
+                      </td>
+                      <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                        <p class="txt_courant_ssalinea" lang="tr-TR">Saniyede 5-10 GB</p>
+                      </td>
+                      <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                        <p class="txt_courant_ssalinea" lang="tr-TR">Terabaytlar</p>
+                      </td>
+                    </tr>
+                    <tr style="padding:7px;">
+                      <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                        <p class="txt_courant_ssalinea" lang="tr-TR">G4</p>
+                      </td>
+                      <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                        <p class="txt_courant_ssalinea" lang="tr-TR">Ağ SSD'si</p>
+                      </td>
+                      <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                        <p class="txt_courant_ssalinea" lang="tr-TR">Saniyede gigabaytlar</p>
+                      </td>
+                      <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                        <p class="txt_courant_ssalinea" lang="tr-TR">Onlarca terabayt</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">
+              <span epub:type="pagebreak" id="page_140" title="140" role="doc-pagebreak"/>GB200 gibi belirli SKU'lar, <i>KV cache</i> offload için ideal kılan, çok daha hızlı G2 depolama sunan <i>CPU</i>'lar ve interconnect'lerle birlikte gelir.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR"><i>NVIDIA Dynamo</i>, KVBM (KV Block Manager) aracılığıyla <i>KV cache</i> offloading desteği sağlar. KVBM, <i>KV cache</i> bloklarını farklı bellek düzeyleri arasında taşımak için <i>API</i>'ler sunar. Genel bir kural olarak, en sık kullanılan blokları daha yüksek bant genişlikli bellekte tutmak isterken, daha az kullanılan bloklar ihtiyaç duyulana kadar daha yavaş depolamaya bırakılabilir.</p>
+          </div>
+          <div class="niv2" id="niv2-054">
+            <h4 epub:type="title" class="int_niv2" lang="tr-TR">5.3.3   Önbellek Farkındalıklı Yönlendirme</h4>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Canlı ortamda, çıkarım sunucunuzun birden fazla replikası olur ve gelen trafik replikalar arasında bölüştürülür. Genellikle trafik, her replikanın ne kadar meşgul olduğuna göre yönlendirilir.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Çıkarım sunucunuz prefix önbelleklemeyi yoğun şekilde kullanıyorsa, yönlendirme mantığınızın bunu hesaba katacak şekilde güncellenmesi gerekir. Bir chatbot ile uzun bir konuşma yürüten ya da bir kod tabanı hakkında birden fazla soru soran bir kullanıcının isteği, daha hızlı ve daha ucuz bir istek için <i>cache</i> hit alabilmesi adına mümkün olduğunca aynı replikaya yönlendirilmelidir.</p>
+            <figure class="fig" id="fig-053">
+              <div class="imagelarge">
+                <img src="images/fig_52.jpg" alt="" class="imagelarge" role="presentation"/>
+              </div>
+              <figcaption class="leg">
+                <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">
+                  <b>Şekil 5.10: </b>Önbellek farkındalıklı yönlendirme, trafiği yalnızca replikalar arasında eşit bölüştürmek yerine <i>KV cache</i>'e dayalı olarak dağıtır.</p>
+              </figcaption>
+            </figure>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Bir diğer seçenek de, replikalar arasında küresel bir <i>KV cache</i> oluşturmak için G4 ağ depolamasını kullanmaktır. Yönlendirme burada da önemlidir -sıcak bir G1 <span epub:type="pagebreak" id="page_141" title="141" role="doc-pagebreak"/><i>cache</i>'e sahip bir replika, G4'ten okuyan bir replikadan daha hızlı isteğe yanıt verir- ama küresel bir <i>cache</i>, tüm replikaların eninde sonunda önceden hesaplanmış herhangi bir diziye erişebilmesini ve önbelleğe alınmış dizilerin node'lar yenilendiğinde veya otomatik ölçekleme sırasında kapatıldığında kaybolmamasını sağlar.</p>
+          </div>
+          <div class="niv2" id="niv2-055">
+            <h4 epub:type="title" class="int_niv2" lang="tr-TR">5.3.4   Uzun Bağlam Yönetimi</h4>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">"Uzun bağlam" biraz totolojik bir tanımdır: bir dizi, çıkarım sırasında soruna yol açacak kadar büyük bir <i>KV cache</i> ürettiğinde "uzun bağlam" haline gelir.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Modele, donanıma, motora ve trafiğe bağlı olarak, bu sorunlar 32K, 64K veya 128K <i>token</i> gibi yaygın eşiklerin ötesinde ortaya çıkmaya başlayabilir. Performans benchmark'ınızda, çıkarım servisinizi uzun bağlam isteklerine karşı test etmek için çok büyük girdi dizileri göndermeyi unutmayın.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Temel model laboratuvarları, daha uzun ve daha doğru bağlam pencerelerinin kilidini açmak için RoPE gibi ölçekleme tekniklerini kullanıyor. Ama bu yükseltilmiş bağlam pencerelerini desteklemek, çıkarımda yeni zorluklar getiriyor.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR"><i>KV cache</i>'i hesaba kattığınızda, <i>attention</i> denklemi dizi uzunluğuyla doğrusal olarak ölçeklenir. Uzun dizilerde, <i>attention</i>, <i>decode</i>'un sınırlandığı temel kaynak olan <i>VRAM</i>'in başlıca tüketicisi haline gelebilir.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Sliding window <i>attention</i>, sıkıştırılmış <i>attention</i> ve sparse <i>attention</i> gibi yaklaşımlar model bazında çözümler sunarken, standart <i>attention</i> algoritmasını optimize etmek için genel yaklaşımlar da vardır:</p>
+            <ul class="liste_puce">
+              <li>
+                <p class="liste_txt_courant_ssalinea" lang="tr-TR">
+                  <b><i>FlashAttention</i>:</b> Bellekten okuma ve belleğe yazma sayısını azaltarak <i>attention</i>'ı hesaplamak için bir dizi optimize edilmiş <i>attention</i> <i>kernel</i>'i.</p>
+              </li>
+              <li>
+                <p class="liste_txt_courant_ssalinea" lang="tr-TR">
+                  <b>PagedAttention:</b> <i>KV cache</i>'i sabit boyutlu sayfalarda saklayan, parçalanmayı (fragmentation) ve tekrarı azaltan bir bellek yönetim tekniği.</p>
+              </li>
+              <li>
+                <p class="liste_txt_courant_ssalinea" lang="tr-TR">
+                  <b>Chunked <i>Prefill</i>:</b> Büyük girdi dizilerini, kaynaklar elverdiğince <i>decode</i> ile birlikte çalıştırılabilen parçalara (chunk) bölme stratejisi; böylece çıkarım motorunun uzun bir diziyle aşırı yüklenmesi önlenir.</p>
+              </li>
+            </ul>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Ama bu optimizasyonlardan sonra bile <i>KV cache</i>'i saklamak için tek bir <i>GPU</i>'nun sunduğundan daha fazla <i>VRAM</i>'e ihtiyacınız varsa? Çıkarımı birden fazla <i>GPU</i> üzerinde paralelleştirmeniz gerekecek.</p>
+          </div>
+        </div>
+        <!--@@niv1-->
+        <div class="niv1" id="niv1-030">
+          <span epub:type="pagebreak" id="page_142" title="142" role="doc-pagebreak"/>
+          <h3 epub:type="title" class="int_niv1" lang="tr-TR">5.4   Model Paralelliği</h3>
+          <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Bugün piyasadaki her sınır (frontier) <i>LLM</i>, <i>batch</i> çıkarım için tek bir <i>GPU</i>'ya sığamayacak kadar büyüktür. <i>GPU</i>'lar büyürken modeller de büyüdü; bu eğilimin tersine döneceğine dair bir işaret yok.</p>
+          <p class="bl"> </p>
+          <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">FP8'de, bir milyar parametrelik model ağırlığını yüklemek yaklaşık bir gigabayt <i>VRAM</i> gerektirir. 671 milyar parametreli <i>DeepSeek</i>-V3.1 gibi bir model için, yalnızca model ağırlıkları bile tek bir B200 <i>GPU</i>'nun anında bellek yetersizliği (<i>OOM</i>) hatası vermesine yol açar.</p>
+          <p class="bl"> </p>
+          <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Model ağırlıklarını <i>VRAM</i>'e zar zor sığdırmak yeterli değildir. 720 GB <i>VRAM</i>'e sahip 4xB200 <i>GPU</i> üzerinde, teorik olarak <i>DeepSeek</i>'in ağırlıklarını yükleyebilirsiniz. Ama ağırlıklardan sonra kalan <i>VRAM</i>'in yüzde 80'inden ya da daha fazlasını genellikle alan bir <i>KV cache</i> için geriye hiç yer kalmadığında, dört B200 <i>GPU</i>, <i>DeepSeek</i>'i makul herhangi bir dizi uzunluğu veya <i>batch</i> boyutuyla sunamaz.</p>
+          <p class="bl"> </p>
+          <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Bunun yerine, <i>DeepSeek</i> boyutundaki bir modelde gerçek üretim trafiğini sunmak için sekiz B200 <i>GPU</i>'dan oluşan tam bir node gerekir. Hassasiyeti, parametre sayısını ve beklenen <i>KV cache</i> ayrımını çarparak bir model için gereken minimum <i>GPU</i> sayısını tahmin edebilirsiniz.</p>
+          <figure class="fig" id="fig-054">
+            <div class="imagelarge">
+              <img src="images/fig_53.jpg" alt="" class="imagelarge" role="presentation"/>
+            </div>
+            <figcaption class="leg">
+              <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">
+                <b>Şekil 5.11: </b>Çıkarımın ne kadar <i>VRAM</i> gerektirdiğini bulduktan sonra, minimum <i>GPU</i> sayısını belirlemek için bir sonraki uygun instance boyutuna yuvarlayın.</p>
+            </figcaption>
+          </figure>
+          <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">
+            <span epub:type="pagebreak" id="page_143" title="143" role="doc-pagebreak"/><i>GPT</i> OSS gibi orta boyutlu modeller dahil birçok durumda, daha büyük <i>KV cache</i>'lerin kilidini açmak ve kullanıcı başına daha iyi gecikme elde etmek için gereken minimum sayıdan daha fazla <i>GPU</i> kullanmak istersiniz.</p>
+          <p class="bl"> </p>
+          <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Ancak tüm bunlar, çıkarımın tek bir <i>GPU</i>'dan birden fazla <i>GPU</i>'ya verimli şekilde ölçeklenmesini gerektirir. Paralel çıkarımı ölçeklemenin sınırlaması, <i>GPU</i>'lar arasındaki iletişim ek yüküdür.</p>
+          <p class="bl"> </p>
+          <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Bölüm 3, <i>GPU</i>'lar arasındaki farklı interconnect'leri ayrıntılı olarak ele alır: node'lar içinde <i>NVLink</i> ve <i>NVSwitch</i>, node'lar arasında <i>InfiniBand</i>.</p>
+          <p class="bl"> </p>
+          <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR"><i>NVLink</i> ve <i>InfiniBand</i> yüksek bant genişliği sunsa da, <i>VRAM</i> hızının yalnızca bir kesridir. <i>Decode</i> bellek bant genişliğiyle sınırlı olduğundan, çoklu <i>GPU</i> çıkarımı, <i>GPU</i>'lar arası iletişimde darboğazlardan kaçınacak şekilde dikkatle tasarlanmalıdır. Bu çalışma alanına topoloji farkındalıklı paralellik (topology-aware parallelism) denir.</p>
+          <p class="bl"> </p>
+          <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Çıkarımda üç temel model paralelliği biçimi vardır:</p>
+          <ul class="liste_puce">
+            <li>
+              <p class="liste_txt_courant_ssalinea" lang="tr-TR">
+                <b><i>Pipeline</i> Paralelliği (PP):</b> Modelin katmanlarını <i>GPU</i>'lar arasında böler.</p>
+            </li>
+            <li>
+              <p class="liste_txt_courant_ssalinea" lang="tr-TR">
+                <b>Tensor Paralelliği (TP):</b> Her katman içindeki tensörleri <i>GPU</i>'lar arasında böler.</p>
+            </li>
+            <li>
+              <p class="liste_txt_courant_ssalinea" lang="tr-TR">
+                <b>Expert Paralelliği (EP):</b> <i>MoE</i> modellerindeki tüm expert'leri farklı <i>GPU</i>'lar arasında parçalar.</p>
+            </li>
+          </ul>
+          <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Her paralellik biçiminin kendi ödünleşimleri vardır:</p>
+          <div class="tableau" id="tableau-017">
+            <div class="table-align">
+              <table style="border-collapse:collapse; border:outset 0pt; width:100%" border="1">
+                <colgroup style="padding:7px;">
+                  <col style="padding:7px;"/>
+                  <col style="width:42.31%;"/>
+                  <col style="width:42.31%;"/>
+                </colgroup>
+                <tbody>
+                  <tr style="padding:7px;">
+                    <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                      <p class="txt_courant_ssalinea" lang="tr-TR">
+                        <b>Yöntem</b>
+                      </p>
+                    </td>
+                    <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                      <p class="txt_courant_ssalinea" lang="tr-TR">
+                        <b>Mekanizma</b>
+                      </p>
+                    </td>
+                    <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                      <p class="txt_courant_ssalinea" lang="tr-TR">
+                        <b>Dezavantaj</b>
+                      </p>
+                    </td>
+                  </tr>
+                  <tr style="padding:7px;">
+                    <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                      <p class="txt_courant_ssalinea" lang="tr-TR">PP</p>
+                    </td>
+                    <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                      <p class="txt_courant_ssalinea" lang="tr-TR">Her <i>GPU</i>, forward ve backward pass'in bir aşamasını üstlenir.</p>
+                    </td>
+                    <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                      <p class="txt_courant_ssalinea" lang="tr-TR">Adım adım işleyen <i>pipeline</i>'ın yol açtığı zayıf gecikme ve düşük kullanım nedeniyle önerilmez.</p>
+                    </td>
+                  </tr>
+                  <tr style="padding:7px;">
+                    <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                      <p class="txt_courant_ssalinea" lang="tr-TR">TP</p>
+                    </td>
+                    <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                      <p class="txt_courant_ssalinea" lang="tr-TR">Matmul gibi compute-yoğun işlemler <i>GPU</i>'lar arasında bölünür.</p>
+                    </td>
+                    <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                      <p class="txt_courant_ssalinea" lang="tr-TR"><i>GPU</i>'lar arasında senkronizasyon gerektirir, çoklu node için uygun değildir.</p>
+                    </td>
+                  </tr>
+                  <tr style="padding:7px;">
+                    <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                      <p class="txt_courant_ssalinea" lang="tr-TR">EP</p>
+                    </td>
+                    <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                      <p class="txt_courant_ssalinea" lang="tr-TR">Her expert tek bir <i>GPU</i> içinde yaşar, bu da expert-içi çıkarımı hızlandırır.</p>
+                    </td>
+                    <td style="border:1px solid currentColor;padding:5px;vertical-align:top">
+                      <p class="txt_courant_ssalinea" lang="tr-TR">Birden fazla expert'e ulaşmak için <i>GPU</i>'lar arasında yönlendirme gerektirir, verim için daha iyidir.</p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Tensor Paralelliği, tek bir node içinde düşük gecikmeli model çıkarımı için genellikle en iyisidir, Expert Paralelliği ise <i>MoE</i> <i>LLM</i>'ler için verimi iyileştirir. <i>Pipeline</i> Paralelliği yalnızca çoklu node çıkarımı için kullanılır.</p>
+          <p class="bl"> </p>
+          <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">
+            <span epub:type="pagebreak" id="page_144" title="144" role="doc-pagebreak"/>Ayrıca, Context Paralelliği gibi veri paralelliği stratejileri de hesaplamayı cihazlar arasında böler. Bu stratejiler <i>LLM</i> çıkarımında nadirdir ama video üretimi için (bölüm 6.6) esastır.</p>
+          <div class="niv2" id="niv2-056">
+            <h4 epub:type="title" class="int_niv2" lang="tr-TR">5.4.1   Daha Düşük Gecikme için Tensor Paralelliği</h4>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Tensor Paralelliği, çoklu <i>GPU</i> model çıkarımı için varsayılan stratejiniz olmalıdır. Hem <i>Llama</i> 405B gibi yoğun (dense) modelleri hem de günümüzde açık model dünyasına hâkim olan <i>MoE</i> modellerini destekler.</p>
+            <figure class="fig" id="fig-055">
+              <div class="imagelarge">
+                <img src="images/fig_54.jpg" alt="" class="imagelarge" role="presentation"/>
+              </div>
+              <figcaption class="leg">
+                <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">
+                  <b>Şekil 5.12: </b>Tensor Paralelliği, ağırlıkları <i>GPU</i>'lar arasında bölerek büyük modelleri hızlı çalıştırmak için <i>VRAM</i> kaynaklarını etkin biçimde paylaştırır.</p>
+              </figcaption>
+            </figure>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">TP, modelin her katmanını parçalara ayırarak (katmanları bütün bırakan <i>Pipeline</i> Paralelliği'nin aksine) ve katman parçalarını tahsis edilen <i>GPU</i>'lar arasında dağıtarak çalışır. Her katman için, ağırlık belleğinden okuma ve matris çarpımı yürütme maliyeti <i>GPU</i>'lar arasında paylaştırılır.</p>
+            <figure class="fig" id="fig-056">
+              <div class="imagelarge">
+                <img src="images/fig_55.jpg" alt="" class="imagelarge" role="presentation"/>
+              </div>
+              <figcaption class="leg">
+                <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">
+                  <b>Şekil 5.13: </b>Mixture of Experts modelleri için, her expert Tensor Paralelliği ile birden fazla <i>GPU</i> üzerinde çalışır.</p>
+              </figcaption>
+            </figure>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">
+              <span epub:type="pagebreak" id="page_145" title="145" role="doc-pagebreak"/>Ancak bir sonraki katman hesaplanabilmeden önce her katmanın sonuçlarının all-reduce şeklinde tek bir çıktıda birleştirilmesi gerekir. Yüksek bant genişlikli node-içi <i>NVLink</i> ve <i>NVSwitch</i>'e sahip node'larda bu iletişim ek yükü en aza indirilir.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Tensor Paralelliği'ni artırmak, kullanıcı başına <i>TPS</i>'i iyileştirir (modelin yeterince büyük ve dizilerin yeterince uzun olduğu, böylece iletişim ek yükünün daha hızlı <i>forward pass</i>'in faydasını gölgelemediği varsayılarak; çoğu sınır modeli için durum budur).</p>
+          </div>
+          <div class="niv2" id="niv2-057">
+            <h4 epub:type="title" class="int_niv2" lang="tr-TR">5.4.2   Daha Yüksek Verim için Expert Paralelliği</h4>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Expert Paralelliği, expert'leri <i>GPU</i>'lar arasında düzgünce böler. 128 expert'e sahip ve EP8 olarak sekiz <i>GPU</i> üzerinde sunulan bir modelde, her <i>GPU</i> 16 tam expert barındırır.</p>
+            <figure class="fig" id="fig-057">
+              <div class="imagelarge">
+                <img src="images/fig_56.jpg" alt="" class="imagelarge" role="presentation"/>
+              </div>
+              <figcaption class="leg">
+                <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">
+                  <b>Şekil 5.14: </b>Expert Paralelliği her expert'i tek bir <i>GPU</i> içinde çalıştırır ve her <i>GPU</i> birden fazla expert barındırır.</p>
+              </figcaption>
+            </figure>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">EP, toplam sistem verimini iyileştirerek çıkarımı daha ölçeklenebilir ve daha az maliyetli hale getirir. Bireysel expert'ler <i>token</i>'ları ayrı ayrı işlediğinden, her <i>token</i> aynı süreyi alır, ama sistem bir bütün olarak çok daha fazla eşzamanlı <i>token</i> işleyebilir.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Birçok dağıtım, her iki faydayı da elde etmek için TP ve EP karışımı kullanır.</p>
+            <figure class="fig" id="fig-058">
+              <div class="imagelarge">
+                <img src="images/fig_57.jpg" alt="" class="imagelarge" role="presentation"/>
+              </div>
+              <figcaption class="leg">
+                <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">
+                  <b>
+                    <span epub:type="pagebreak" id="page_146" title="146" role="doc-pagebreak"/>Şekil 5.15: </b>Bu dağıtım, <i>attention</i> için TP ve sparse <i>MoE</i> katmanı için EP kullanır.</p>
+              </figcaption>
+            </figure>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Expert Paralelliği, Tensor Paralelliği'nden daha az <i>GPU</i>'lar arası iletişim gerektirir. Hangi <i>token</i>'ın hangi expert'i etkinleştireceğini belirleyen Expert Router, modelin görece küçük bir bileşeni olduğundan her <i>GPU</i>'ya kopyalanır. <i>Token</i>'ları expert'ten expert'e geçirmek için <i>GPU</i>'lar arası iletişim gereklidir, ama TP'nin aksine her katmanın sonuçlarını toplamak için gerekli değildir.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Bu daha düşük iletişim ek yükü sayesinde, EP çoklu node dağıtımlara ve sınırlı interconnect bant genişliğine sahip sistemlere iyi ölçeklenir.</p>
+          </div>
+          <div class="niv2" id="niv2-058">
+            <h4 epub:type="title" class="int_niv2" lang="tr-TR">5.4.3   Çoklu Node Çıkarımı</h4>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Yüksek hassasiyette devasa bir model sunuyorsanız, milyonlarca <i>token</i>'lık girdi dizilerini destekliyorsanız ya da çıkarımı mümkün olduğunca hızlı çalıştırmaya çalışıyorsanız, sekizden fazla <i>GPU</i>'ya ihtiyacınız olabilir.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR"><i>GPU</i>'lar node'lar arasında birlikte çalışacak şekilde tasarlanmıştır ve çoklu node eğitimi, sınır modelleri geliştirmek için yıllardır standarttır. Ama çoklu node çıkarımı yeni zorluklar getirir:</p>
+            <ul class="liste_puce">
+              <li>
+                <p class="liste_txt_courant_ssalinea" lang="tr-TR">
+                  <b>Altyapı:</b> İki veya daha fazla birbirine bağlı <i>GPU</i> node'unu güvenilir biçimde nasıl temin eder ve bulut sağlayıcıları arasında soyutlamalar nasıl inşa edersiniz (<a class="renv" href="p8.xhtml#chap-008">bölüm 7</a>)?</p>
+              </li>
+              <li>
+                <p class="liste_txt_courant_ssalinea" lang="tr-TR">
+                  <b>Paralellik:</b> <i>NVLink</i>'ten çok daha yavaş olan <i>InfiniBand</i> üzerinden nasıl etkin şekilde iletişim kurarsınız?</p>
+              </li>
+            </ul>
+            <figure class="fig" id="fig-059">
+              <div class="imagelarge">
+                <img src="images/fig_58.jpg" alt="" class="imagelarge" role="presentation"/>
+              </div>
+              <figcaption class="leg">
+                <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">
+                  <b>
+                    <span epub:type="pagebreak" id="page_147" title="147" role="doc-pagebreak"/>Şekil 5.16: </b><i>InfiniBand</i>, yüksek bant genişlikli node-node interconnect'i aracılığıyla sekizden fazla <i>GPU</i> üzerinde çoklu node çıkarımını mümkün kılar.</p>
+              </figcaption>
+            </figure>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR"><i>InfiniBand</i>, topoloji farkındalıklı paralelliğe yeni bir incelik kazandırır. Tensor Paralelliği genellikle çoklu node çıkarımı için iyi bir uyum olamayacak kadar fazla <i>GPU</i>'lar arası iletişim gerektirir. Bunun yerine, <i>InfiniBand</i> üzerinden iyi çalışan iki seçeneğiniz vardır:</p>
+            <ol class="liste_num">
+              <li>
+                <p class="liste_txt_courant_ssalinea" lang="tr-TR">Yoğun (dense) modeller için, her node içinde Tensor Paralelliği ve node'lar arasında <i>Pipeline</i> Paralelliği kullanın (örneğin TP8PP2).</p>
+              </li>
+              <li>
+                <p class="liste_txt_courant_ssalinea" lang="tr-TR"><i>MoE</i> modelleri için, Tensor Paralelliği'nden daha düşük iletişim ek yüküne sahip olduğundan Expert Paralelliği'ni de (örneğin EP16) deneyebilirsiniz.</p>
+              </li>
+            </ol>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR"><i>MoE</i> modelleri için, TP8PP2 genellikle kullanıcı başına daha düşük gecikme sunar, EP16 ise daha yüksek genel sistem verimi sağlar.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Modeliniz ve <i>KV cache</i>'iniz çoklu node çıkarımı gerektirecek kadar büyük değilse, bu muhtemelen fazladan donanımın en iyi kullanımı değildir. Genellikle <span epub:type="pagebreak" id="page_148" title="148" role="doc-pagebreak"/>ekstra node'ları replikalar arasında yatay ölçekleme için ya da disaggregated serving için kullanmak daha iyidir.</p>
+          </div>
+        </div>
+        <!--@@niv1-->
+        <div class="niv1" id="niv1-031">
+          <h3 epub:type="title" class="int_niv1" lang="tr-TR">5.5   Disaggregation</h3>
+          <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Disaggregation, çıkarım mühendisliğindeki üç önemli fikri birleştirir:</p>
+          <ol class="liste_num">
+            <li>
+              <p class="liste_txt_courant_ssalinea" lang="tr-TR"><i>Prefill</i>, <i>TTFT</i>'nizi belirleyen compute-bound bir süreçtir, <i>decode</i> ise <i>TPS</i>'nizi belirleyen memory-bound bir süreçtir.</p>
+            </li>
+            <li>
+              <p class="liste_txt_courant_ssalinea" lang="tr-TR">Uzmanlaşma (specialization), <i>kernel</i> seçiminden çıkarım motoru parametre ayarına kadar her şeyde performansı iyileştirir.</p>
+            </li>
+            <li>
+              <p class="liste_txt_courant_ssalinea" lang="tr-TR">Daha düşük bant genişlikli interconnect'lerden kaynaklanan darboğazlardan kaçınabiliyorsanız, model sunumunu birden fazla <i>GPU</i> hatta birden fazla node üzerinden etkin biçimde paralelleştirebilirsiniz.</p>
+            </li>
+          </ol>
+          <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR"><i>Prefill</i> ve <i>decode</i> aynı node üzerinde yoğun trafik altında çalıştığında, birbirine müdahale etme olasılıkları artar. İdeal olarak, <i>prefill</i> daha fazla compute kaynağı kullanırken <i>decode</i> daha fazla bellek kullanır ve ikisi verimli bir şekilde bir arada var olabilir. Ancak daha büyük <i>batch</i>'ler ve daha compute-yoğun optimizasyonlarla, <i>prefill</i> ve <i>decode</i> kaynaklar için rekabet etmeye başlar.</p>
+          <div class="niv2" id="niv2-059">
+            <h4 epub:type="title" class="int_niv2" lang="tr-TR">5.5.1   Disaggregation Nasıl Çalışır</h4>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Disaggregation, ya da disaggregated serving, <i>prefill</i> ve <i>decode</i>'u ayrı <i>GPU</i>'lar veya node'lar üzerindeki ayrı motorlara bölme fikridir.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Disaggregation, <i>LLM</i> çıkarımını üç adımlı bir sürece dönüştürür:</p>
+            <ol class="liste_num">
+              <li>
+                <p class="liste_txt_courant_ssalinea" lang="tr-TR"><i>Prefill</i> motoru, girdi dizisini alır ve ilk <i>token</i>'ı hesaplarken bir <i>KV cache</i> üretir.</p>
+              </li>
+              <li>
+                <p class="liste_txt_courant_ssalinea" lang="tr-TR"><i>Prefill</i> motoru, <i>KV cache</i>'i donanım interconnect'i üzerinden <i>decode</i> motoruna gönderir.</p>
+              </li>
+              <li>
+                <p class="liste_txt_courant_ssalinea" lang="tr-TR"><i>Decode</i> motoru, sonraki tüm <i>token</i>'ları hesaplar.</p>
+              </li>
+            </ol>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Koşullu disaggregation'da, istek önce <i>decode</i> motoruna gönderilir; bu motor girdi dizisinin zaten önbelleğe alınmış olup olmadığını ya da yerel olarak işlenebilecek kadar kısa olup olmadığını kontrol eder:</p>
+            <figure class="fig" id="fig-060">
+              <div class="imagelarge">
+                <img src="images/fig_59.jpg" alt="" class="imagelarge" role="presentation"/>
+              </div>
+              <figcaption class="leg">
+                <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">
+                  <b>
+                    <span epub:type="pagebreak" id="page_149" title="149" role="doc-pagebreak"/>Şekil 5.17: </b>Disaggregation, ilk <i>token</i>'ı üretmesi için <i>prefill</i> worker'ları, sonraki <i>token</i>'ları üretmesi için <i>decode</i> worker'ları atar.</p>
+              </figcaption>
+            </figure>
+            <ol class="liste_num">
+              <li>
+                <p class="liste_txt_courant_ssalinea" lang="tr-TR">Eğer öyleyse, <i>decode</i> motoru <i>prefill</i>'i yerel olarak işler ve disaggregation'ı atlar.</p>
+              </li>
+              <li>
+                <p class="liste_txt_courant_ssalinea" lang="tr-TR">Eğer değilse, <i>decode</i> motoru isteği disaggregated serving için <i>prefill</i> motoruna aktarır.</p>
+              </li>
+            </ol>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Koşullu disaggregation, gerçek dünya trafiği için daha iyidir.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Disaggregation'ın bir diğer faydası, ayrı <i>prefill</i> ve <i>decode</i> motorları ile her bir motoru ve sistemin tamamını ayrı ayrı optimize edebilmenizdir. Örneğin, compute-bound <i>prefill</i> motoru, memory-bound <i>decode</i> motorundan daha düşük bir TP gerektirir.</p>
+          </div>
+          <div class="niv2" id="niv2-060">
+            <h4 epub:type="title" class="int_niv2" lang="tr-TR">5.5.2   Disaggregation Ne Zaman Kullanılır</h4>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Disaggregation çok güçlüdür ama birden fazla <i>GPU</i> ve ekstra mühendislik çalışması gerektirir. Disaggregation'a yalnızca şu durumlarda başvurmalısınız:</p>
+            <ol class="liste_num">
+              <li>
+                <p class="liste_txt_courant_ssalinea" lang="tr-TR">Model boyutuna bağlı olarak günde yüz milyondan bir milyara kadar <i>token</i>'la başlayan büyük hacimli bir trafiği sunuyorsanız.</p>
+              </li>
+              <li>
+                <p class="liste_txt_courant_ssalinea" lang="tr-TR">Daha büyük bir model, en az yüz milyar parametreli bir model sunuyorsanız.</p>
+              </li>
+              <li>
+                <p class="liste_txt_courant_ssalinea" lang="tr-TR">Trafiğiniz uzun girdi dizileriyle <i>prefill</i>-ağırlıklıysa.</p>
+              </li>
+            </ol>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">
+              <span epub:type="pagebreak" id="page_150" title="150" role="doc-pagebreak"/>Birinci ya da ikinci madde doğru değilse, muhtemelen minimal performans kazanımları için fazladan donanıma para harcıyorsunuzdur. Üçüncü madde doğru değilse, kısa diziler veya prefix <i>cache</i> hit'leri için <i>decode</i> motorları daha verimli olacağından, fazladan <i>GPU</i>'ları replikaları yatay olarak ölçeklemek için kullanmak daha iyi olabilir.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Disaggregation için harika bir kullanım örneği, birçok geliştiricinin aynı anda büyük ve çeşitli kod parçalarını bağlam olarak ilettiği bir kod editöründe sınır bir <i>LLM</i> sunmaktır. Trilyon parametreli bir <i>LLM</i>'de, çoğunlukla <i>prefill</i> olan tonlarca <i>token</i>, disaggregation için ders kitabı niteliğinde bir iş yüküdür.</p>
+          </div>
+          <div class="niv2" id="niv2-061">
+            <h4 epub:type="title" class="int_niv2" lang="tr-TR">5.5.3   <i>NVIDIA Dynamo</i> ile Dinamik Disaggregation</h4>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Dynamo, heterojen gerçek dünya trafiğini ele alma esnekliğiyle disaggregation için üretime hazır destek sağlar.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Dynamo, disaggregation'ı mümkün kılmak için geliştirici araçları ve hazır optimizasyonlar sunar:</p>
+            <ul class="liste_puce">
+              <li>
+                <p class="liste_txt_courant_ssalinea" lang="tr-TR">Tüm <i>prefill</i> motorları doygun olduğunda istekleri tutmak için bir <i>prefill</i> kuyruğu.</p>
+              </li>
+              <li>
+                <p class="liste_txt_courant_ssalinea" lang="tr-TR">Prefix <i>cache</i> sonrası <i>ISL</i> ve <i>prefill</i> kuyruğu boyutu için yapılandırılabilir eşiklere dayalı <i>prefill</i> yönlendirmesiyle, koşullu disaggregation için sağlam destek.</p>
+              </li>
+              <li>
+                <p class="liste_txt_courant_ssalinea" lang="tr-TR">Engine'ler farklı TP yapılandırmalarına sahip olduğunda KV bloklarını düzenler arasında devrik (transpose) hale getiren bir <i>kernel</i> ile <i>prefill</i>'den <i>decode</i> motorlarına verimli NIXL tabanlı KV aktarımı.</p>
+              </li>
+            </ul>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Bir araya geldiğinde, bu özellikler, <i>prefill</i> ve <i>decode</i> motoru sayısının <i>runtime</i>'da yapılandırılabilir olduğu ve gelen trafiğin değişen doğasına uyacak şekilde zaman içinde ayarlanabildiği dinamik disaggregation'ı mümkün kılar.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Disaggregation'ın <i>prefill</i> ve <i>decode</i> motorları arasında bire bir bir oran olması gerekmez. Disaggregation'ı tek bir <i>prefill</i> motoru ve tek bir <i>decode</i> motoru açısından açıklamak basit olsa da, gerçek sistemlerin her birinden birden fazlası vardır.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR"><i>Prefill</i> ve <i>decode</i> motoru sayısı xPyD şeklinde yazılır; örneğin 5P3D, tek bir model dağıtımını birlikte sunan beş <i>prefill</i> ve üç <i>decode</i> motoru anlamına gelir.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">
+              <span epub:type="pagebreak" id="page_151" title="151" role="doc-pagebreak"/>Sistemler daha karmaşık hale geldikçe, daha fazla potansiyel darboğaz ortaya çıkar. Disaggregation ile birlikte, yeni darboğaz <i>prefill</i> kuyruğu boyutudur. Hem <i>decode</i> motorunda yerel <i>prefill</i> için makul bir eşik belirleyerek hem de gerekirse <i>prefill</i>'e daha fazla kaynak ayırmak için xPyD'yi <i>runtime</i>'da yeniden yapılandırarak kuyruğun çok fazla büyümesine izin vermemek önemlidir.</p>
+            <p class="bl"> </p>
+            <p class="txt_courant_ssalinea retrait_gauche" lang="tr-TR">Disaggregation'daki diğer potansiyel darboğaz, yüksek yük altında <i>decode</i> motorlarında <i>KV cache</i>'in tükenmesidir. Nicemleme ve <i>KV cache</i> offloading ile <i>KV cache</i> kullanılabilirliğini artırın.</p>
+          </div>
+        </div>
+        <!--@@niv1-->
+      </div>
+    </section>
+  </body>
+</html>
