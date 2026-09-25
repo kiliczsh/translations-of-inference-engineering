@@ -1,8 +1,18 @@
 # Inference Engineering Translations
 
-This repository contains translation projects for Philip Kiely's
-*Inference Engineering*. Each language is isolated under its ISO 639-1 code so
-additional translations can be added without mixing sources or tooling.
+This repository contains translations of
+[*Inference Engineering*](https://www.baseten.co/inference-engineering/) by
+[Philip Kiely](https://philipkiely.com/). The book explains how to build fast,
+reliable, and cost-efficient systems for running AI models in production.
+
+Each translation is isolated under its ISO 639-1 language code so additional
+editions can be added without mixing language-specific sources or tooling. See
+the [official book page](https://www.baseten.co/inference-engineering/) for
+information about the original publication.
+
+## Download
+
+- [Download the Original](https://simple-download.vercel.app/)
 
 ## Project structure
 
